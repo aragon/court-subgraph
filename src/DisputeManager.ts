@@ -151,7 +151,8 @@ function createJurorDispute(disputeId: BigInt, juror: Address): JurorDispute | n
   if (jurorDispute === null) {
     jurorDispute = new JurorDispute(id)
     jurorDispute.dispute = disputeId.toString()
-    jurorDispute.juror = juror.toString()
+    jurorDispute.juror = juror.toHexString()
+    jurorDispute.save()
   }
 
   return jurorDispute
