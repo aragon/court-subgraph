@@ -81,6 +81,7 @@ export function handleRulingAppealConfirmed(event: RulingAppealConfirmed): void 
   let manager = DisputeManager.bind(event.address)
   let dispute = new Dispute(event.params.disputeId.toString())
   let disputeResult = manager.getDispute(event.params.disputeId)
+  dispute.state = castDisputeState(disputeResult.value2)
   dispute.lastRoundId = disputeResult.value4
   dispute.save()
 
