@@ -111,6 +111,7 @@ export function handleAppealDepositSettled(event: AppealDepositSettled): void {
 
 export function handleRulingComputed(event: RulingComputed): void {
   let dispute = Dispute.load(event.params.disputeId.toString())
+  dispute.state = 'Ruled'
   dispute.finalRuling = event.params.ruling
   dispute.save()
 }
