@@ -6,7 +6,7 @@ export function handleEvidenceSubmitted(event: EvidenceSubmitted): void {
   let evidence = new Evidence(id)
   evidence.arbitrable = event.address.toHex()
   evidence.dispute = event.params.disputeId.toString()
-  evidence.data = event.params.evidence
+  evidence.data = event.params.evidence.toString()
   evidence.submitter = event.params.submitter
   evidence.createdAt = event.block.timestamp
   evidence.save()

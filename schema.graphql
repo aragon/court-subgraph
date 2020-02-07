@@ -92,7 +92,7 @@ type Evidence @entity {
   id: ID!
   arbitrable: Arbitrable!
   dispute: Dispute!
-  data: Bytes!
+  data: String!
   submitter: Bytes!
   createdAt: BigInt!
 }
