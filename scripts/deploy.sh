@@ -71,3 +71,6 @@ fi
 
 # Deploy subgraph
 graph deploy aragon/aragon-court${SUBGRAPH_EXT} --ipfs ${IPFS_NODE} --node ${GRAPH_NODE}
+
+# Remove manifest
+rm subgraph.yaml
