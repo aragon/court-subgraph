@@ -41,7 +41,7 @@ echo "Deploying new subgraph for court address ${COURT} to network ${NETWORK}"
 cp subgraph.template.yaml subgraph.yaml
 sed -i -e "s/{{network}}/${ENV}/g" subgraph.yaml
 sed -i -e "s/{{court}}/${COURT}/g" subgraph.yaml
-rm subgraph.yaml-e
+rm -f subgraph.yaml-e
 
 # Run codegen
 npm run codegen
