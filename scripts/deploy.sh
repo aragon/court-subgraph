@@ -10,16 +10,16 @@ if [ -f subgraph.yaml ]; then
 fi
 
 # Validate network
-networks=(rpc staging ropsten rinkeby mainnet)
+networks=(rpc ropsten staging usability rinkeby mainnet)
 if [[ -z $NETWORK || ! " ${networks[@]} " =~ " ${NETWORK} " ]]; then
-  echo 'Please make sure the network provided is either rpc, staging, ropsten, rinkeby, or mainnet.'
+  echo 'Please make sure the network provided is either rpc, ropsten, staging, usability, rinkeby, or mainnet.'
   exit 1
 fi
 
 # Use mainnet network in case of local deployment
 if [[ "$NETWORK" = "rpc" ]]; then
   ENV='mainnet'
-elif [[ "$NETWORK" = "staging" ]]; then
+elif [[ "$NETWORK" = "staging" || "$NETWORK" = "usability" ]]; then
   ENV='rinkeby'
 else
   ENV=${NETWORK}
