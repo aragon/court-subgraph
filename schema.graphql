@@ -163,7 +163,7 @@ type Juror @entity {
   withdrawalsLockTermId: BigInt!
   disputes: [JurorDispute!] @derivedFrom(field: "juror")
   drafts: [JurorDraft!] @derivedFrom(field: "juror")
-  treasuryTokens: [JurorTreasuryToken!] @derivedFrom(field: "juror")
+  treasuryTokens: [JurorTreasuryTokenBalance!] @derivedFrom(field: "juror")
   movements: [ANJMovement!] @derivedFrom(field: "juror")
   createdAt: BigInt!
 }
@@ -237,7 +237,7 @@ enum FeeMovementType {
   Subscriptions
 }
 
-type JurorTreasuryToken @entity {
+type JurorTreasuryTokenBalance @entity {
   id: ID!
   token: ERC20!
   juror: Juror!

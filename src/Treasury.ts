@@ -1,5 +1,5 @@
 import { buildId } from '../helpers/id'
-import { FeeMovement, JurorTreasuryToken } from '../types/schema'
+import { FeeMovement, JurorTreasuryTokenBalance } from '../types/schema'
 import { FeesClaimed, Subscriptions } from '../types/templates/Subscriptions/Subscriptions'
 import { Assign, Withdraw, Treasury } from '../types/templates/Treasury/Treasury'
 import { crypto, Address, ByteArray, EthereumEvent } from '@graphprotocol/graph-ts'
@@ -39,9 +39,7 @@ export function handleSubscriptionPaid(event: FeesClaimed): void {
   movement.createdAt = event.block.timestamp
   movement.save()
   let subscriptions = Subscriptions.bind(event.address)
-  // TODO: it won't work if there's a token change after the event!!
-  // let token = subscriptions.getPeriod(event.params.periodId)
-  let periodDetails = subscriptions.getCurrentPeriod()
+  let periodDetails = subscriptions.getJurorShare(event.params.juror, event.params.periodId)
   let token = periodDetails.value0
   updateJurorToken(token, event.params.juror, event)
 }
@@ -54,12 +52,12 @@ function updateJurorToken(token: Address, juror: Address, event: EthereumEvent):
   jurorToken.save()
 }
 
-function loadOrCreateJurorToken(token: Address, juror: Address): JurorTreasuryToken | null {
+function loadOrCreateJurorToken(token: Address, juror: Address): JurorTreasuryTokenBalance | null {
   let id = buildJurorTokenId(token, juror)
-  let jurorToken = JurorTreasuryToken.load(id)
+  let jurorToken = JurorTreasuryTokenBalance.load(id)
 
   if (jurorToken === null) {
-    jurorToken = new JurorTreasuryToken(id)
+    jurorToken = new JurorTreasuryTokenBalance(id)
     jurorToken.token = token.toHex()
     jurorToken.juror = juror.toHex()
   }
