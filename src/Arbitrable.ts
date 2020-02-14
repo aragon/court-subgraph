@@ -2,7 +2,7 @@ import { Evidence } from '../types/schema'
 import { EvidenceSubmitted } from '../types/templates/Arbitrable/Arbitrable'
 
 export function handleEvidenceSubmitted(event: EvidenceSubmitted): void {
-  let id = event.transaction.hash.toHex() + event.logIndex.toHex()
+  let id = event.transaction.hash.toHex() + event.logIndex.toHex().slice(2).padStart(4, '0')
   let evidence = new Evidence(id)
   evidence.arbitrable = event.address.toHex()
   evidence.dispute = event.params.disputeId.toString()
