@@ -38,10 +38,6 @@ export function handleSubscriptionPaid(event: FeesClaimed): void {
   movement.amount = event.params.jurorShare
   movement.createdAt = event.block.timestamp
   movement.save()
-  let subscriptions = Subscriptions.bind(event.address)
-  let periodDetails = subscriptions.getJurorShare(event.params.juror, event.params.periodId)
-  let token = periodDetails.value0
-  updateJurorToken(token, event.params.juror, event)
 }
 
 function updateJurorToken(token: Address, juror: Address, event: EthereumEvent): void {
