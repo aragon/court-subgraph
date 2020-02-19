@@ -183,7 +183,7 @@ function updateAppeal(disputeId: BigInt, roundNumber: BigInt, event: EthereumEve
   appeal.settled = false
   appeal.appealDeposit = nextRound.value6
   appeal.confirmAppealDeposit = nextRound.value7
-  if (appeal.opposedRuling.gt(new BigInt(0))) {
+  if (appeal.opposedRuling.gt(BigInt.fromI32(0))) {
     appeal.confirmedAt = event.block.timestamp
   }
   appeal.save()
