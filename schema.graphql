@@ -1,3 +1,18 @@
+directive @entity on OBJECT
+directive @derivedFrom(field: String) on FIELD_DEFINITION
+
+scalar BigInt
+scalar Bytes
+
+schema {
+  query: Query
+}
+
+type Query {
+  courtConfig: CourtConfig
+  dispute: Dispute
+}
+
 type CourtConfig @entity {
   id: ID!
   currentTerm: BigInt!
@@ -139,6 +154,20 @@ type Appeal @entity {
   createdAt: BigInt!
 }
 
+type Vote @entity {
+  id: ID!
+  winningOutcome: OutcomeType!
+  createdAt: BigInt!
+}
+
+enum OutcomeType {
+  Missing
+  Leaked
+  Refused
+  Against
+  InFavor
+}
+
 type Juror @entity {
   id: ID!
   treeId: BigInt!
@@ -149,7 +178,8 @@ type Juror @entity {
   withdrawalsLockTermId: BigInt!
   disputes: [JurorDispute!] @derivedFrom(field: "juror")
   drafts: [JurorDraft!] @derivedFrom(field: "juror")
-  movements: [ANJMovement!] @derivedFrom(field: "juror")
+  anjMovements: [ANJMovement!] @derivedFrom(field: "juror")
+  feeMovements: [FeeMovement!] @derivedFrom(field: "juror")
   createdAt: BigInt!
 }
 
@@ -220,18 +250,4 @@ enum FeeMovementType {
   Assign
   Withdraw
   Subscriptions
-}
-
-type Vote @entity {
-  id: ID!
-  winningOutcome: OutcomeType!
-  createdAt: BigInt!
-}
-
-enum OutcomeType {
-  Missing
-  Leaked
-  Refused
-  Against
-  InFavor
 }
