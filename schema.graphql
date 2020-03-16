@@ -141,19 +141,6 @@ enum AdjudicationState {
   Ended
 }
 
-type Appeal @entity {
-  id: ID!
-  round: AdjudicationRound!
-  maker: Bytes!
-  appealedRuling: BigInt!
-  appealDeposit: BigInt!
-  taker: Bytes!
-  opposedRuling: BigInt!
-  confirmAppealDeposit: BigInt!
-  settled: Boolean!
-  createdAt: BigInt!
-}
-
 type Vote @entity {
   id: ID!
   winningOutcome: OutcomeType!
@@ -168,6 +155,20 @@ enum OutcomeType {
   InFavor
 }
 
+type Appeal @entity {
+  id: ID!
+  round: AdjudicationRound!
+  maker: Bytes!
+  appealedRuling: BigInt!
+  appealDeposit: BigInt!
+  taker: Bytes!
+  opposedRuling: BigInt!
+  confirmAppealDeposit: BigInt!
+  settled: Boolean!
+  confirmedAt: BigInt
+  createdAt: BigInt!
+}
+
 type Juror @entity {
   id: ID!
   treeId: BigInt!
@@ -178,7 +179,8 @@ type Juror @entity {
   withdrawalsLockTermId: BigInt!
   disputes: [JurorDispute!] @derivedFrom(field: "juror")
   drafts: [JurorDraft!] @derivedFrom(field: "juror")
-  anjMovements: [ANJMovement!] @derivedFrom(field: "juror")
+  treasuryTokens: [JurorTreasuryTokenBalance!] @derivedFrom(field: "juror")
+  movements: [ANJMovement!] @derivedFrom(field: "juror")
   feeMovements: [FeeMovement!] @derivedFrom(field: "juror")
   createdAt: BigInt!
 }
@@ -250,4 +252,11 @@ enum FeeMovementType {
   Assign
   Withdraw
   Subscriptions
+}
+
+type JurorTreasuryTokenBalance @entity {
+  id: ID!
+  token: ERC20!
+  juror: Juror!
+  balance: BigInt!
 }
