@@ -168,6 +168,7 @@ type Juror @entity {
   anjMovements: [ANJMovement!] @derivedFrom(field: "juror")
   feeMovements: [FeeMovement!] @derivedFrom(field: "owner")
   treasuryBalances: [TreasuryBalance!] @derivedFrom(field: "owner")
+  claimedFees: [JurorSubscriptionFee!] @derivedFrom(field: "juror")
   createdAt: BigInt!
 }
 
