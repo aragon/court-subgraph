@@ -125,6 +125,8 @@ export function handleAppealDepositSettled(event: AppealDepositSettled): void {
   let appeal = Appeal.load(appealId.toString())
   appeal.settled = true
   appeal.save()
+
+  createAppealFeesForDeposits(event.params.disputeId, event.params.roundId, appeal as Appeal, event)
 }
 
 export function handleRulingComputed(event: RulingComputed): void {
@@ -199,7 +201,6 @@ function updateAppeal(disputeId: BigInt, roundNumber: BigInt, event: EthereumEve
   }
 
   appeal.save()
-  createAppealFeesForDeposits(disputeId, roundNumber, appeal as Appeal, event)
 }
 
 function createAppealFeesForDeposits(disputeId: BigInt, roundNumber: BigInt, appeal: Appeal, event: EthereumEvent): void {
