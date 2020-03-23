@@ -47,7 +47,7 @@ export function handleHeartbeat(event: Heartbeat): void {
   currentTerm.save()
 
   let subscriptions = court.getSubscriptions()
-  updateCurrentSubscriptionPeriod(subscriptions)
+  updateCurrentSubscriptionPeriod(subscriptions, event.block.timestamp)
 }
 
 export function handleFundsGovernorChanged(event: FundsGovernorChanged): void {
@@ -120,6 +120,10 @@ export function handleModuleSet(event: ModuleSet): void {
     subscriptionModule.periodDuration = subscriptions.periodDuration()
     subscriptionModule.prePaymentPeriods = subscriptions.prePaymentPeriods()
     subscriptionModule.resumePrePaidPeriods = subscriptions.resumePrePaidPeriods()
+    subscriptionModule.totalDonated = BigInt.fromI32(0)
+    subscriptionModule.totalPaid = BigInt.fromI32(0)
+    subscriptionModule.totalCollected = BigInt.fromI32(0)
+    subscriptionModule.totalGovernorShares = BigInt.fromI32(0)
     subscriptionModule.save()
   }
   else {
