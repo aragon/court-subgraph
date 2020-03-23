@@ -107,6 +107,7 @@ templates:
         - JurorDispute
         - ANJMovement
         - FeeMovement
+        - JurorsRegistryModule
       abis:
         - name: Controller
           file: ./node_modules/@aragon/court/abi/Controller.json

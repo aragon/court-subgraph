@@ -4,7 +4,7 @@ import { BigInt, Address, EthereumEvent } from '@graphprotocol/graph-ts'
 import { updateCurrentSubscriptionPeriod } from './Subscriptions'
 import { Subscriptions as SubscriptionsContract } from '../types/templates/Subscriptions/Subscriptions'
 import { JurorsRegistry as JurorsRegistryContract } from '../types/templates/JurorsRegistry/JurorsRegistry'
-import { ERC20, CourtModule, CourtConfig, CourtTerm, SubscriptionModule } from '../types/schema'
+import { ERC20, CourtModule, CourtConfig, CourtTerm, SubscriptionModule, JurorsRegistryModule } from '../types/schema'
 import { ANJ, DisputeManager, JurorsRegistry, Treasury, Voting, Subscriptions } from '../types/templates'
 import { Heartbeat, ModuleSet, FundsGovernorChanged, ConfigGovernorChanged, ModulesGovernorChanged } from '../types/AragonCourt/AragonCourt'
 
@@ -92,6 +92,12 @@ export function handleModuleSet(event: ModuleSet): void {
     let config = CourtConfig.load(event.address.toHex())
     config.anjToken = anjAddress.toHex()
     config.save()
+
+    let registryModule = new JurorsRegistryModule(event.params.addr.toHex())
+    registryModule.court = event.address.toHex()
+    registryModule.totalStaked = BigInt.fromI32(0)
+    registryModule.totalActive = BigInt.fromI32(0)
+    registryModule.save()
   }
   else if (id == DISPUTE_MANAGER_ID) {
     DisputeManager.create(event.params.addr)

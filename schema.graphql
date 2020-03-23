@@ -24,6 +24,7 @@ type CourtConfig @entity {
   fundsGovernor: Bytes
   configGovernor: Bytes
   modulesGovernor: Bytes
+  jurorsRegistry: JurorsRegistryModule @derivedFrom(field: "court")
   subscriptions: SubscriptionModule @derivedFrom(field: "court")
   modules: [CourtModule!] @derivedFrom(field: "court")
   terms: [CourtTerm!] @derivedFrom(field: "court")
@@ -246,6 +247,13 @@ type TreasuryBalance @entity {
   owner: Juror! # TODO: this should work for type Bytes
   token: ERC20!
   amount: BigInt!
+}
+
+type JurorsRegistryModule @entity {
+  id: ID!
+  court: CourtConfig!
+  totalStaked: BigInt!
+  totalActive: BigInt!
 }
 
 type SubscriptionModule @entity {
