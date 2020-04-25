@@ -55,8 +55,8 @@ fi
 
 # Select IPFS and The Graph nodes
 if [[ "$NETWORK" = "rpc" ]]; then
-  IPFS_NODE="http://localhost:5001"
-  GRAPH_NODE="http://127.0.0.1:8020"
+  IPFS_NODE="${IPFS_NODE:-'http://localhost:5001'}"
+  GRAPH_NODE="${GRAPH_NODE:-'http://127.0.0.1:8020'}"
 else
   IPFS_NODE="https://api.thegraph.com/ipfs/"
   GRAPH_NODE="https://api.thegraph.com/deploy/"

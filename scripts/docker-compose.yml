@@ -1,0 +1,61 @@
+version: "3"
+services:
+  graph:
+    container_name: graph
+    image: graphprotocol/graph-node
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8020:8020"
+      - "8030:8030"
+      - "8040:8040"
+    depends_on:
+      - ipfs
+      - ethereum
+      - postgres
+    environment:
+      postgres_host: postgres:5432
+      postgres_user: graph
+      postgres_pass: let-me-in
+      postgres_db: graph
+      ipfs: "ipfs:5001"
+      ethereum: "mainnet:http://ethereum:8545"
+      RUST_LOG: info
+
+  ipfs:
+    container_name: ipfs
+    image: ipfs/go-ipfs:v0.4.23
+    ports:
+      - "5001:5001"
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    ports:
+      - "5432:5432"
+    command: ["postgres", "-cshared_preload_libraries=pg_stat_statements"]
+    environment:
+      POSTGRES_USER: graph
+      POSTGRES_PASSWORD: let-me-in
+      POSTGRES_DB: graph
+
+  ethereum:
+    container_name: ganache
+    image: trufflesuite/ganache-cli
+    ports:
+      - "8545:8545"
+      - "8546:8546"
+    command: --networkId 15 --gasLimit 8000000 --gasPrice 1 --deterministic --noVMErrorsOnRPCResponse
+
+  test:
+    container_name: test
+    build:
+      context: ../
+      dockerfile: scripts/test/Dockerfile
+    depends_on:
+      - graph
+      - ipfs
+    environment:
+      IPFS_NODE: http://ipfs:5001
+      GRAPH_NODE: http://graph:8020
+      GRAPHQL_SERVER: http://graph:8000

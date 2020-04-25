@@ -1,0 +1,20 @@
+name: "Tests"
+on: [push, pull_request]
+
+jobs:
+  tests:
+    runs-on: ubuntu-16.04
+    env:
+      CI: true
+    name: Tests
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Test subgraph build
+        run: docker-compose -f ./scripts/docker-compose.yml up --abort-on-container-exit --build --force-recreate --renew-anon-volumes --timeout 0
+        # --abort-on-container-exit: Only the test service should exit.
+        #   Then, the overall exit code will the the test service exit code
+        # --build: Make sure to apply test container possible changes
+        # --force-recreate: Make sure to clear ephemeral container
+        # --renew-anon-volumes: Make sure postgress and ganache data deleted
+        # --timeout 0: Speed up teardown
