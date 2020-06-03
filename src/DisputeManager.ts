@@ -102,6 +102,7 @@ export function handlePenaltiesSettled(event: PenaltiesSettled): void {
   // update dispute settledPenalties if needed
   if (dispute.lastRoundId == event.params.roundId) {
     dispute.settledPenalties = true
+    dispute.settledPenaltiesAt = event.block.timestamp
   }
 
   // create movements for appeal fees if there were no coherent jurors
