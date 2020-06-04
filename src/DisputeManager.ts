@@ -102,8 +102,17 @@ export function handlePenaltiesSettled(event: PenaltiesSettled): void {
   // update dispute settledPenalties if needed
   if (dispute.lastRoundId == event.params.roundId) {
     dispute.settledPenalties = true
-    dispute.settledPenaltiesAt = event.block.timestamp
   }
+
+  // update juror drafts settled penalties at date
+  let roundId = buildRoundId(event.params.disputeId, event.params.roundId)
+  let round = AdjudicationRound.load(roundId.toString())
+  round.jurors.forEach(juror => {
+    let roundId = buildRoundId(event.params.disputeId, event.params.roundId)
+    let draft = JurorDraft.load(buildDraftId(roundId, Address.fromString(juror)))
+    draft.settledPenaltiesDate = event.block.timestamp
+    draft.save()
+  })
 
   // create movements for appeal fees if there were no coherent jurors
   createAppealFeesForJurorFees(event, event.params.disputeId)
