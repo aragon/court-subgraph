@@ -30,7 +30,7 @@ export function tryDecodingAgreementMetadata(dispute: Dispute): void {
     disputable.disputableActionId = actionData.value1
     disputable.defendant = actionData.value4
     disputable.plaintiff = challengeData.value1
-    disputable.organization = agreement.kernel()
+    disputable.organization = agreement.try_kernel().reverted ? null : agreement.try_kernel().value
     disputable.save()
   }
 }
