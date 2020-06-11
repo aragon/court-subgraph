@@ -27,7 +27,7 @@ export function handleNewDispute(event: NewDispute): void {
   let dispute = new Dispute(event.params.disputeId.toString())
   let disputeResult = manager.getDispute(event.params.disputeId)
   dispute.subject = event.params.subject.toHex()
-  dispute.metadata = event.params.metadata.toString()
+  dispute.metadata = event.params.metadata
   dispute.possibleRulings = disputeResult.value1
   dispute.state = 'Evidence'
   dispute.settledPenalties = false
