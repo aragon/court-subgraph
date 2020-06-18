@@ -50,9 +50,18 @@ export function handleJurorDeactivationRequested(event: JurorDeactivationRequest
 }
 
 export function handleJurorDeactivationUpdated(event: JurorDeactivationUpdated): void {
+  let juror = loadOrCreateJuror(event.params.juror, event)
+  let previousDeactivationAmount = juror.deactivationBalance
+
   updateJuror(event.params.juror, event)
   createANJMovementForTerm(event.params.juror, DEACTIVATION, event.params.amount, event.params.availableTermId, event)
-  // TODO: update deactivation totalizator
+
+  let currentDeactivationAmount = event.params.amount
+  if (currentDeactivationAmount.gt(previousDeactivationAmount)) {
+    increaseTotalDeactivation(event.address, currentDeactivationAmount.minus(previousDeactivationAmount))
+  } else {
+    decreaseTotalDeactivation(event.address, previousDeactivationAmount.minus(currentDeactivationAmount))
+  }
 }
 
 export function handleJurorDeactivationProcessed(event: JurorDeactivationProcessed): void {
