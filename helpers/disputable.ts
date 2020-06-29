@@ -26,8 +26,8 @@ export function tryDecodingAgreementMetadata(dispute: Dispute): void {
 
     let disputable = new Disputable(buildAgreementActionId(agreement._address, challengeId))
     disputable.dispute = dispute.id
-    disputable.title = settingData.value0
-    disputable.agreement = settingData.value1.toString()
+    disputable.title = settingData.value1
+    disputable.agreement = settingData.value2.toString()
     disputable.actionId = challengeId
     disputable.address = actionData.value0
     disputable.disputableActionId = actionData.value1

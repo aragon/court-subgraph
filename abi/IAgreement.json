@@ -125,9 +125,67 @@
       "anonymous": false,
       "inputs": [
         {
+          "indexed": false,
+          "name": "settingId",
+          "type": "uint256"
+        }
+      ],
+      "name": "SettingChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "disputable",
+          "type": "address"
+        }
+      ],
+      "name": "DisputableAppActivated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "disputable",
+          "type": "address"
+        }
+      ],
+      "name": "DisputableAppDeactivated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "disputable",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "collateralRequirementId",
+          "type": "uint256"
+        }
+      ],
+      "name": "CollateralRequirementChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
           "indexed": true,
           "name": "actionId",
           "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "name": "disputable",
+          "type": "address"
         }
       ],
       "name": "ActionSubmitted",
@@ -252,30 +310,6 @@
       "inputs": [
         {
           "indexed": true,
-          "name": "disputable",
-          "type": "address"
-        }
-      ],
-      "name": "DisputableAppRegistered",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "disputable",
-          "type": "address"
-        }
-      ],
-      "name": "DisputableAppUnregistered",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
           "name": "arbitrator",
           "type": "address"
         },
@@ -329,6 +363,50 @@
       "constant": false,
       "inputs": [],
       "name": "sign",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_disputable",
+          "type": "address"
+        },
+        {
+          "name": "_collateralToken",
+          "type": "address"
+        },
+        {
+          "name": "_actionAmount",
+          "type": "uint256"
+        },
+        {
+          "name": "_challengeAmount",
+          "type": "uint256"
+        },
+        {
+          "name": "_challengeDuration",
+          "type": "uint64"
+        }
+      ],
+      "name": "activate",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_disputable",
+          "type": "address"
+        }
+      ],
+      "name": "deactivate",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -409,7 +487,7 @@
           "type": "uint256"
         }
       ],
-      "name": "settle",
+      "name": "settleAction",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -428,50 +506,6 @@
         }
       ],
       "name": "disputeAction",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_disputable",
-          "type": "address"
-        },
-        {
-          "name": "_collateralToken",
-          "type": "address"
-        },
-        {
-          "name": "_actionAmount",
-          "type": "uint256"
-        },
-        {
-          "name": "_challengeAmount",
-          "type": "uint256"
-        },
-        {
-          "name": "_challengeDuration",
-          "type": "uint64"
-        }
-      ],
-      "name": "register",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_disputable",
-          "type": "address"
-        }
-      ],
-      "name": "unregister",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -502,6 +536,105 @@
     },
     {
       "constant": true,
+      "inputs": [],
+      "name": "getCurrentSettingId",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_settingId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getSetting",
+      "outputs": [
+        {
+          "name": "arbitrator",
+          "type": "address"
+        },
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "content",
+          "type": "bytes"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_disputable",
+          "type": "address"
+        }
+      ],
+      "name": "getDisputableInfo",
+      "outputs": [
+        {
+          "name": "registered",
+          "type": "bool"
+        },
+        {
+          "name": "currentCollateralRequirementId",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_disputable",
+          "type": "address"
+        },
+        {
+          "name": "_collateralId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getCollateralRequirement",
+      "outputs": [
+        {
+          "name": "collateralToken",
+          "type": "address"
+        },
+        {
+          "name": "actionAmount",
+          "type": "uint256"
+        },
+        {
+          "name": "challengeAmount",
+          "type": "uint256"
+        },
+        {
+          "name": "challengeDuration",
+          "type": "uint64"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
       "inputs": [
         {
           "name": "_actionId",
@@ -519,7 +652,7 @@
           "type": "uint256"
         },
         {
-          "name": "collateralId",
+          "name": "collateralRequirementId",
           "type": "uint256"
         },
         {
@@ -604,105 +737,6 @@
         {
           "name": "ruling",
           "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "getCurrentSettingId",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "_settingId",
-          "type": "uint256"
-        }
-      ],
-      "name": "getSetting",
-      "outputs": [
-        {
-          "name": "title",
-          "type": "string"
-        },
-        {
-          "name": "content",
-          "type": "bytes"
-        },
-        {
-          "name": "arbitrator",
-          "type": "address"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "_disputable",
-          "type": "address"
-        }
-      ],
-      "name": "getDisputableInfo",
-      "outputs": [
-        {
-          "name": "registered",
-          "type": "bool"
-        },
-        {
-          "name": "currentCollateralRequirementId",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "_disputable",
-          "type": "address"
-        },
-        {
-          "name": "_collateralId",
-          "type": "uint256"
-        }
-      ],
-      "name": "getCollateralRequirement",
-      "outputs": [
-        {
-          "name": "collateralToken",
-          "type": "address"
-        },
-        {
-          "name": "actionAmount",
-          "type": "uint256"
-        },
-        {
-          "name": "challengeAmount",
-          "type": "uint256"
-        },
-        {
-          "name": "challengeDuration",
-          "type": "uint64"
         }
       ],
       "payable": false,
