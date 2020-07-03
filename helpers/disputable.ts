@@ -12,7 +12,7 @@ export function tryDecodingAgreementMetadata(dispute: Dispute): void {
   if (metadata.length != AGREEMENT_DISPUTE_METADATA_LENGTH) return
 
   let header = metadata.subarray(0, AGREEMENT_DISPUTE_HEADER.length / 2) as Bytes
-  if (header.toHexString() != AGREEMENT_DISPUTE_HEADER) return
+  if (header.toHexString().slice(2) != AGREEMENT_DISPUTE_HEADER) return
 
   let rawChallengeId = metadata.subarray(AGREEMENT_DISPUTE_HEADER.length / 2, metadata.length) as Bytes
   let challengeId = BigInt.fromSignedBytes(rawChallengeId.reverse() as Bytes)
