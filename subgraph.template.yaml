@@ -21,7 +21,6 @@ dataSources:
         - ERC20
         - SubscriptionModule
         - SubscriptionPeriod
-        - Subscriber
         - JurorSubscriptionFee
       abis:
         - name: AragonCourt
@@ -201,30 +200,31 @@ templates:
         - FeeMovement
         - SubscriptionModule
         - SubscriptionPeriod
-        - Subscriber
         - JurorSubscriptionFee
+        - AppFee
+        - SubscriptionToken
       abis:
         - name: Subscriptions
           file: ./node_modules/@aragon/court/abi/CourtSubscriptions.json
       eventHandlers:
-        - event: FeesClaimed(indexed address,indexed uint256,uint256)
+        - event: FeesClaimed(indexed address,indexed uint256,address,uint256)
           handler: handleJurorFeesClaimed
-        - event: FeesPaid(indexed address,uint256,uint256,uint256,uint256)
+        - event: FeesPaid(indexed address,indexed uint256,address,uint256,bytes)
           handler: handleFeesPaid
-        - event: FeesDonated(indexed address,uint256)
+        - event: FeesDonated(indexed address,indexed uint256,address,uint256)
           handler: handleFeesDonated
         - event: FeeTokenChanged(address,address)
           handler: handleFeeTokenChanged
         - event: FeeAmountChanged(uint256,uint256)
           handler: handleFeeAmountChanged
-        - event: PrePaymentPeriodsChanged(uint256,uint256)
-          handler: handlePrePaymentPeriodsChanged
         - event: GovernorSharePctChanged(uint16,uint16)
           handler: handleGovernorSharePctChanged
-        - event: LatePaymentPenaltyPctChanged(uint16,uint16)
-          handler: handleLatePaymentPenaltyPctChanged
-        - event: ResumePenaltiesChanged(uint256,uint256)
-          handler: handleResumePenaltiesChanged
+        - event: AppFeeSet(indexed bytes32,address,uint256)
+          handler: handleAppFeeSet
+        - event: AppFeeUnset(indexed bytes32)
+          handler: handleAppFeeUnset
+        - event: AppFeePaid(indexed address,bytes32,bytes)
+          handler: handleAppFeePaid
       file: ./src/Subscriptions.ts
   - kind: ethereum/contract
     name: ANJ
@@ -260,6 +260,6 @@ templates:
         - name: Arbitrable
           file: ./node_modules/@aragon/court/abi/IArbitrable.json
       eventHandlers:
-        - event: EvidenceSubmitted(indexed uint256,indexed address,bytes,bool)
+        - event: EvidenceSubmitted(indexed address,indexed uint256,indexed address,bytes,bool)
           handler: handleEvidenceSubmitted
       file: ./src/Arbitrable.ts

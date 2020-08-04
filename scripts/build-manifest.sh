@@ -65,3 +65,23 @@ sed -i -e "s/{{network}}/${ENV}/g" subgraph.yaml
 sed -i -e "s/{{court}}/${COURT}/g" subgraph.yaml
 sed -i -e "s/{{startBlock}}/${START_BLOCK}/g" subgraph.yaml
 rm -f subgraph.yaml-e
+
+# Set blacklisted modules
+echo "Setting blacklisted modules"
+# TODO: Get rid of jq dependency
+set +o errexit
+jq --version > /dev/null
+result=$?
+if [ ${result} -gt 0 ]; then
+    echo "Install jq first from: https://stedolan.github.io/jq/download/"
+    exit 1;
+fi
+set -o errexit
+
+BLACKLISTED_MODULES=$(cat blacklisted-modules.json | jq -cM ".${NETWORK}")
+BLACKLIST_FOLDER="helpers/"
+CONST_NAME="BLACKLISTED_MODULES"
+cp ${BLACKLIST_FOLDER}blacklist.template.ts ${BLACKLIST_FOLDER}blacklist.ts
+sed -i -e "s/const ${CONST_NAME}\: string\[\] = \[\]/const ${CONST_NAME}\: string\[\] = ${BLACKLISTED_MODULES//\"/\'}/g" ${BLACKLIST_FOLDER}blacklist.ts
+# Hack to make sed work both on Linux and OSX
+rm -f ${BLACKLIST_FOLDER}blacklist.ts-e

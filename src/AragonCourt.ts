@@ -7,6 +7,7 @@ import { JurorsRegistry as JurorsRegistryContract } from '../types/templates/Jur
 import { ERC20, CourtModule, CourtConfig, CourtTerm, SubscriptionModule, JurorsRegistryModule } from '../types/schema'
 import { ANJ, DisputeManager, JurorsRegistry, Treasury, Voting, Subscriptions } from '../types/templates'
 import { Heartbeat, ModuleSet, FundsGovernorChanged, ConfigGovernorChanged, ModulesGovernorChanged } from '../types/AragonCourt/AragonCourt'
+import { BLACKLISTED_MODULES } from '../helpers/blacklist'
 
 let DISPUTE_MANAGER_TYPE = 'DisputeManager'
 let JURORS_REGISTRY_TYPE = 'JurorsRegistry'
@@ -47,7 +48,9 @@ export function handleHeartbeat(event: Heartbeat): void {
   currentTerm.save()
 
   let subscriptions = court.getSubscriptions()
-  updateCurrentSubscriptionPeriod(subscriptions, event.block.timestamp)
+  if (!BLACKLISTED_MODULES.includes(subscriptions.toHex())) {
+    updateCurrentSubscriptionPeriod(subscriptions, event.block.timestamp)
+  }
 }
 
 export function handleFundsGovernorChanged(event: FundsGovernorChanged): void {
@@ -71,6 +74,10 @@ export function handleModulesGovernorChanged(event: ModulesGovernorChanged): voi
 export function handleModuleSet(event: ModuleSet): void {
   let newModuleAdress: Address = event.params.addr
 
+  // avoid blacklisted modules
+  if (isModuleBlacklisted(newModuleAdress)) {
+    return
+  }
   // avoid duplicated modules
   let config = CourtConfig.load(event.address.toHex())
   if (isModuleAlreadySet(config.moduleAddresses, newModuleAdress)) {
