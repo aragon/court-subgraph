@@ -28,6 +28,7 @@ type CourtConfig @entity {
   subscriptions: SubscriptionModule @derivedFrom(field: "court")
   modules: [CourtModule!] @derivedFrom(field: "court")
   terms: [CourtTerm!] @derivedFrom(field: "court")
+  moduleAddresses: [String!]!
 }
 
 type CourtTerm @entity {
