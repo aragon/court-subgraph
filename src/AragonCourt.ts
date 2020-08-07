@@ -153,19 +153,11 @@ export function handleModuleSet(event: ModuleSet): void {
 }
 
 function isModuleBlacklisted(module: Address): boolean {
-  if (BLACKLISTED_MODULES.includes(module.toHex())) {
-    return true
-  }
-
-  return false
+  return BLACKLISTED_MODULES.includes(module.toHex())
 }
 
 function isModuleAlreadySet(modules: string[], newModule: Address): boolean {
-  if (modules.includes(newModule.toHex())) {
-    return true
-  }
-
-  return false
+  return modules.includes(newModule.toHex())
 }
 
 function loadOrCreateConfig(courtAddress: Address, event: EthereumEvent): CourtConfig | null {
