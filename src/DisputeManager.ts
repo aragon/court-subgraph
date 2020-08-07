@@ -3,7 +3,7 @@ import { buildId } from '../helpers/id'
 import { createFeeMovement } from './Treasury'
 import { tryDecodingAgreementMetadata } from '../helpers/disputable'
 import { Arbitrable as ArbitrableTemplate } from '../types/templates'
-import { crypto, Bytes, BigInt, Address, EthereumEvent } from '@graphprotocol/graph-ts'
+import { crypto, Bytes, BigInt, Address, ethereum } from '@graphprotocol/graph-ts'
 import { AdjudicationRound, Arbitrable, Dispute, Appeal, JurorDispute, JurorDraft } from '../types/schema'
 import {
   DisputeManager,
@@ -147,7 +147,7 @@ export function handleRulingComputed(event: RulingComputed): void {
   dispute.save()
 }
 
-function updateRound(disputeId: BigInt, roundNumber: BigInt, event: EthereumEvent): void {
+function updateRound(disputeId: BigInt, roundNumber: BigInt, event: ethereum.Event): void {
   let round = loadOrCreateRound(disputeId, roundNumber, event)
   let manager = DisputeManager.bind(event.address)
   let result = manager.getRound(disputeId, roundNumber)
@@ -166,7 +166,7 @@ function updateRound(disputeId: BigInt, roundNumber: BigInt, event: EthereumEven
   round.save()
 }
 
-function loadOrCreateRound(disputeId: BigInt, roundNumber: BigInt, event: EthereumEvent): AdjudicationRound | null {
+function loadOrCreateRound(disputeId: BigInt, roundNumber: BigInt, event: ethereum.Event): AdjudicationRound | null {
   let id = buildRoundId(disputeId, roundNumber).toString()
   let round = AdjudicationRound.load(id)
 
@@ -193,7 +193,7 @@ function createJurorDispute(disputeId: BigInt, juror: Address): JurorDispute | n
   return jurorDispute
 }
 
-function updateAppeal(disputeId: BigInt, roundNumber: BigInt, event: EthereumEvent): void {
+function updateAppeal(disputeId: BigInt, roundNumber: BigInt, event: ethereum.Event): void {
   let appeal = loadOrCreateAppeal(disputeId, roundNumber, event)
   let manager = DisputeManager.bind(event.address)
   let result = manager.getAppeal(disputeId, roundNumber)
@@ -214,7 +214,7 @@ function updateAppeal(disputeId: BigInt, roundNumber: BigInt, event: EthereumEve
   appeal.save()
 }
 
-function createAppealFeesForDeposits(disputeId: BigInt, roundNumber: BigInt, appealId: BigInt, event: EthereumEvent): void {
+function createAppealFeesForDeposits(disputeId: BigInt, roundNumber: BigInt, appealId: BigInt, event: ethereum.Event): void {
   let appeal = Appeal.load(appealId.toString())
   let manager = DisputeManager.bind(event.address)
   let nextRound = manager.getNextRoundDetails(disputeId, roundNumber)
@@ -258,7 +258,7 @@ function createAppealFeesForJurorFees(event: PenaltiesSettled, disputeId: BigInt
   }
 }
 
-function loadOrCreateAppeal(disputeId: BigInt, roundNumber: BigInt, event: EthereumEvent): Appeal | null {
+function loadOrCreateAppeal(disputeId: BigInt, roundNumber: BigInt, event: ethereum.Event): Appeal | null {
   let id = buildAppealId(disputeId, roundNumber).toString()
   let appeal = Appeal.load(id)
 
