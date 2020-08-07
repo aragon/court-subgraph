@@ -314,6 +314,7 @@ type SubscriptionToken @entity {
   totalCollected: BigInt!
   totalGovernorShares: BigInt!
   instance: SubscriptionModule!
+  token: ERC20!
 }
 
 type AppFee @entity {

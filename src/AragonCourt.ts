@@ -72,28 +72,28 @@ export function handleModulesGovernorChanged(event: ModulesGovernorChanged): voi
 }
 
 export function handleModuleSet(event: ModuleSet): void {
-  let newModuleAdress: Address = event.params.addr
+  let newModuleAddress: Address = event.params.addr
 
   // avoid blacklisted modules
-  if (isModuleBlacklisted(newModuleAdress)) {
+  if (isModuleBlacklisted(newModuleAddress)) {
     return
   }
   // avoid duplicated modules
   let config = CourtConfig.load(event.address.toHex())
-  if (isModuleAlreadySet(config.moduleAddresses, newModuleAdress)) {
+  if (isModuleAlreadySet(config.moduleAddresses, newModuleAddress)) {
     return
   }
 
   let module = new CourtModule(event.params.id.toHex())
   module.court = event.address.toHex()
-  module.address = newModuleAdress
+  module.address = newModuleAddress
 
   let id = event.params.id.toHexString()
   if (id == JURORS_REGISTRY_ID) {
-    JurorsRegistry.create(newModuleAdress)
+    JurorsRegistry.create(newModuleAddress)
     module.type = JURORS_REGISTRY_TYPE
 
-    let jurorsRegistry = JurorsRegistryContract.bind(newModuleAdress)
+    let jurorsRegistry = JurorsRegistryContract.bind(newModuleAddress)
     let anjAddress = jurorsRegistry.token()
     ANJ.create(anjAddress)
 
@@ -107,7 +107,7 @@ export function handleModuleSet(event: ModuleSet): void {
     config.anjToken = anjAddress.toHex()
     config.save()
 
-    let registryModule = new JurorsRegistryModule(newModuleAdress.toHex())
+    let registryModule = new JurorsRegistryModule(newModuleAddress.toHex())
     registryModule.court = event.address.toHex()
     registryModule.totalStaked = BigInt.fromI32(0)
     registryModule.totalActive = BigInt.fromI32(0)
@@ -115,23 +115,23 @@ export function handleModuleSet(event: ModuleSet): void {
     registryModule.save()
   }
   else if (id == DISPUTE_MANAGER_ID) {
-    DisputeManager.create(newModuleAdress)
+    DisputeManager.create(newModuleAddress)
     module.type = DISPUTE_MANAGER_TYPE
   }
   else if (id == VOTING_ID) {
-    Voting.create(newModuleAdress)
+    Voting.create(newModuleAddress)
     module.type = VOTING_TYPE
   }
   else if (id == TREASURY_ID) {
-    Treasury.create(newModuleAdress)
+    Treasury.create(newModuleAddress)
     module.type = TREASURY_TYPE
   }
   else if (id == SUBSCRIPTIONS_ID) {
-    Subscriptions.create(newModuleAdress)
+    Subscriptions.create(newModuleAddress)
     module.type = SUBSCRIPTIONS_TYPE
 
-    let subscriptionModule = new SubscriptionModule(newModuleAdress.toHex())
-    let subscriptions = SubscriptionsContract.bind(newModuleAdress)
+    let subscriptionModule = new SubscriptionModule(newModuleAddress.toHex())
+    let subscriptions = SubscriptionsContract.bind(newModuleAddress)
     subscriptionModule.court = event.address.toHex()
     subscriptionModule.currentPeriod = BigInt.fromI32(0)
     subscriptionModule.governorSharePct = BigInt.fromI32(subscriptions.governorSharePct())
@@ -145,7 +145,7 @@ export function handleModuleSet(event: ModuleSet): void {
   }
 
   let moduleAddresses = config.moduleAddresses
-  moduleAddresses.push(newModuleAdress.toHex())
+  moduleAddresses.push(newModuleAddress.toHex())
   config.moduleAddresses = moduleAddresses
   config.save()
 

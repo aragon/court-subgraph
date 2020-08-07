@@ -110,8 +110,8 @@ export function updateCurrentSubscriptionPeriod(module: Address, timestamp: BigI
   let currentPeriod = subscriptions.getPeriod(periodId)
   let period = loadOrCreateSubscriptionPeriod(periodId, timestamp)
   period.instance = module.toHex()
-  period.feeToken = subscriptions.currentFeeToken()
-  period.feeAmount = subscriptions.currentFeeAmount()
+  period.feeToken = currentPeriod.value0
+  period.feeAmount = currentPeriod.value1
   period.collectedFees = currentPeriod.value4
   period.accumulatedGovernorFees = currentPeriod.value5
   period.save()
@@ -141,6 +141,7 @@ function loadOrCreateToken(tokenAddress: Address, subscriptions: Address): Subsc
     token.totalCollected = BigInt.fromI32(0)
     token.totalGovernorShares = BigInt.fromI32(0)
     token.instance = subscriptions.toHex()
+    token.token = tokenAddress.toHex()
   }
 
   return token
