@@ -1,4 +1,5 @@
 import { AragonCourt } from '../types/AragonCourt/AragonCourt'
+import { BLACKLISTED_MODULES } from '../helpers/blacklist'
 import { ERC20 as ERC20Contract } from '../types/AragonCourt/ERC20'
 import { BigInt, Address, ethereum } from '@graphprotocol/graph-ts'
 import { updateCurrentSubscriptionPeriod } from './Subscriptions'
@@ -7,7 +8,6 @@ import { JurorsRegistry as JurorsRegistryContract } from '../types/templates/Jur
 import { ERC20, CourtModule, CourtConfig, CourtTerm, SubscriptionModule, JurorsRegistryModule } from '../types/schema'
 import { ANJ, DisputeManager, JurorsRegistry, Treasury, Voting, Subscriptions } from '../types/templates'
 import { Heartbeat, ModuleSet, FundsGovernorChanged, ConfigGovernorChanged, ModulesGovernorChanged } from '../types/AragonCourt/AragonCourt'
-import { BLACKLISTED_MODULES } from '../helpers/blacklist'
 
 let DISPUTE_MANAGER_TYPE = 'DisputeManager'
 let JURORS_REGISTRY_TYPE = 'JurorsRegistry'
@@ -48,7 +48,7 @@ export function handleHeartbeat(event: Heartbeat): void {
   currentTerm.save()
 
   let subscriptions = court.getSubscriptions()
-  if (!BLACKLISTED_MODULES.includes(subscriptions.toHex())) {
+  if (!isModuleBlacklisted(subscriptions)) {
     updateCurrentSubscriptionPeriod(subscriptions, event.block.timestamp)
   }
 }
@@ -78,6 +78,7 @@ export function handleModuleSet(event: ModuleSet): void {
   if (isModuleBlacklisted(newModuleAddress)) {
     return
   }
+
   // avoid duplicated modules
   let config = CourtConfig.load(event.address.toHex())
   if (isModuleAlreadySet(config.moduleAddresses, newModuleAddress)) {
@@ -135,7 +136,6 @@ export function handleModuleSet(event: ModuleSet): void {
     subscriptionModule.court = event.address.toHex()
     subscriptionModule.currentPeriod = BigInt.fromI32(0)
     subscriptionModule.governorSharePct = BigInt.fromI32(subscriptions.governorSharePct())
-    subscriptionModule.feeAmount = subscriptions.currentFeeAmount()
     subscriptionModule.feeToken = subscriptions.currentFeeToken()
     subscriptionModule.periodDuration = subscriptions.periodDuration()
     subscriptionModule.save()
