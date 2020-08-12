@@ -72,7 +72,8 @@ type Dispute @entity {
   lastRoundId: BigInt!
   state: DisputeState!
   settledPenalties: Boolean!
-  metadata: Bytes!
+  metadata: String!
+  rawMetadata: Bytes!
   disputable: Disputable @derivedFrom(field: "dispute")
   rounds: [AdjudicationRound!] @derivedFrom(field: "dispute")
   jurors: [JurorDispute!] @derivedFrom(field: "dispute")
@@ -87,11 +88,16 @@ type Disputable @entity {
   title: String!
   agreement: String!
   actionId: BigInt!
+  challengeId: BigInt!
   address: Bytes!
   disputableActionId: BigInt!
   defendant: Bytes!
   plaintiff: Bytes!
   organization: Bytes!
+  actionContext: String!
+  rawActionContext: Bytes!
+  challengeContext: String!
+  rawChallengeContext: Bytes!
 }
 
 enum DisputeState {

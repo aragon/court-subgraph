@@ -258,8 +258,10 @@ templates:
         - Arbitrable
       abis:
         - name: Arbitrable
-          file: ./node_modules/@aragon/court/abi/IArbitrable.json
+          file: ./abi/IArbitrable.json
       eventHandlers:
+        - event: EvidenceSubmitted(indexed uint256,indexed address,bytes,bool)
+          handler: handleEvidenceSubmittedWithoutArbitrator
         - event: EvidenceSubmitted(indexed address,indexed uint256,indexed address,bytes,bool)
-          handler: handleEvidenceSubmitted
+          handler: handleEvidenceSubmittedWithArbitrator
       file: ./src/Arbitrable.ts
