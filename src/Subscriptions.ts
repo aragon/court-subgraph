@@ -23,7 +23,7 @@ export function handleJurorFeesClaimedWithoutToken(event: FeesClaimedWithoutToke
 }
 
 export function handleJurorFeesClaimedWithToken(event: FeesClaimedWithToken): void {
-  // This handler function works for the new FeesClaimed event introduced in Aragon Court v1.1.4
+  // This handler function works for the new FeesClaimed event introduced in Aragon Court v1.2.0
   // We need to have a different handler to support the new event signature, this event differs from the
   // previous one by adding the arbitrator address to the logged info
   createFeeMovement(SUBSCRIPTIONS, event.params.juror, event.params.jurorShare, event)
