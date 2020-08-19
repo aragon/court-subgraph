@@ -68,5 +68,4 @@ rm -f subgraph.yaml-e
 
 # Parse blacklisted modules
 echo "Setting blacklisted modules"
-rm -f ./helpers/blacklisted-modules.ts
 node ./scripts/parse-blacklisted-modules.js "$NETWORK"
