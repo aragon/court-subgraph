@@ -1,5 +1,5 @@
 import { AragonCourt } from '../types/AragonCourt/AragonCourt'
-import { BLACKLISTED_MODULES } from '../helpers/blacklist'
+import { BLACKLISTED_MODULES } from '../helpers/blacklisted-modules'
 import { ERC20 as ERC20Contract } from '../types/AragonCourt/ERC20'
 import { BigInt, Address, ethereum } from '@graphprotocol/graph-ts'
 import { updateCurrentSubscriptionPeriod } from './Subscriptions'

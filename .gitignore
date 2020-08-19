@@ -8,4 +8,4 @@ package-lock.json
 build
 types
 subgraph.yaml
-helpers/blacklist.ts
+blacklisted-modules.ts
