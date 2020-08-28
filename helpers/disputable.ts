@@ -3,8 +3,11 @@ import { Agreement } from '../types/templates/DisputeManager/Agreement'
 import { Disputable, Dispute } from '../types/schema'
 import { crypto, Bytes, Address, BigInt } from '@graphprotocol/graph-ts'
 
+// App ID for disputable-voting.precedence-campaign.aragonpm.eth:
 const AGREEMENT_OPEN_APP_ID = '34c62f3aec3073826f39c2c35e9a1297d9dbf3cc77472283106f09eee9cf47bf'
+// App ID for agreement.precedence-campaign.aragonpm.eth:
 const AGREEMENT_PC_APP_ID = '15a969a0e134d745b604fb43f699bb5c146424792084c198d53050c4d08126d1'
+
 const AGREEMENT_APP_ID_LENGTH = AGREEMENT_PC_APP_ID.length
 const AGREEMENT_DISPUTE_METADATA_LENGTH = 64 // "[APP_ID][CHALLENGE_ID]" = 32 + 32
 
