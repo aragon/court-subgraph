@@ -316,9 +316,10 @@ function buildAppealId(disputeId: BigInt, roundId: BigInt): BigInt {
 
 function castDisputeState(state: i32): string {
   switch (state) {
-    case 0: return 'Drafting'
-    case 1: return 'Adjudicating'
-    case 2: return 'Ruled'
+    case 0: return 'Evidence'
+    case 1: return 'Drafting'
+    case 2: return 'Adjudicating'
+    case 3: return 'Ruled'
     default: return 'Unknown'
   }
 }
