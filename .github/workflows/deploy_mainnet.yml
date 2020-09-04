@@ -7,7 +7,6 @@ on:
 
 env:
   GRAPHKEY: ${{secrets.GRAPHKEY}}
-  DEPLOY_ARAGON: true
 
 jobs:
   deploy:
