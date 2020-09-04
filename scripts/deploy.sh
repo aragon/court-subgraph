@@ -36,7 +36,7 @@ fi
 }
 
 # Deploy subgraph
-graph deploy aragon/aragon-court${SUBGRAPH_EXT}
-  --ipfs ${IPFS_NODE}
-  --node ${GRAPH_NODE}
+graph deploy aragon/aragon-court${SUBGRAPH_EXT} \
+  --ipfs ${IPFS_NODE} \
+  --node ${GRAPH_NODE} \
   --access-token "$GRAPHKEY"
