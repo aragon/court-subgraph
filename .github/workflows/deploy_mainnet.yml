@@ -15,5 +15,9 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install
       run: npm install
+    - name: Authenticate
+      run: .github/scripts/kubectl-config.sh ${{secrets.KUBE_CA}} ${{secrets.KUBE_SERVER}} ${{secrets.KUBE_TOKEN}}
     - name: Deploy
-      run: npm run deploy:mainnet
+      run: |
+        npm run deploy:staging > .github/scripts/deploy-output.tx
+        .github/scripts/kubectl-deploy.sh aragon-court
