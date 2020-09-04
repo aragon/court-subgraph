@@ -39,4 +39,13 @@ fi
 graph deploy aragon/aragon-court${SUBGRAPH_EXT} \
   --ipfs ${IPFS_NODE} \
   --node ${GRAPH_NODE} \
-  --access-token "$GRAPHKEY"
+  --access-token "$GRAPHKEY" > deploy-output.txt
+
+SUBGRAPH_ID=$(grep "Build completed:" deploy-output.txt | grep -oE "Qm[a-zA-Z0-9]{44}")
+rm deploy-output.txt
+
+if [[ -z "$SUBGRAPH_ID" ]]; then
+  echo "Could not find subgraph ID in deploy output, skipping Aragon infra deployment."
+else
+  echo "Deploying ${SUBGRAPH_ID} to Aragon infra..."
+fi
