@@ -1,0 +1,18 @@
+name: Deploy Testnet
+
+on:
+  push:
+    branches:
+    - '*'
+
+env:
+  GRAPHKEY: ${{secrets.GITHUB_TOKEN}}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: npm run deploy:staging
+    - run: npm run deploy:rinkeby
+    - run: npm run deploy:ropsten
