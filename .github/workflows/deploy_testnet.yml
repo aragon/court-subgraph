@@ -3,7 +3,7 @@ name: Deploy Testnets
 on:
   push:
     branches:
-    - '*'
+    - 'master'
 
 env:
   GRAPHKEY: ${{secrets.GRAPHKEY}}
