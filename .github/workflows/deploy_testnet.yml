@@ -6,7 +6,7 @@ on:
     - '*'
 
 env:
-  GRAPHKEY: ${{secrets.GITHUB_TOKEN}}
+  GRAPHKEY: ${{secrets.GRAPHKEY}}
 
 jobs:
   deploy:
