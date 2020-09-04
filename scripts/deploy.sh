@@ -51,4 +51,5 @@ else
   echo "Deploying subgraph ${SUBGRAPH_ID} to Aragon infra..."
   kubectl exec graph-shell -- create aragon/aragon-court${SUBGRAPH_EXT}
   kubectl exec graph-shell -- deploy aragon/aragon-court${SUBGRAPH_EXT} ${SUBGRAPH_ID} graph_index_node_0
+  kubectl exec graph-shell -- reassign aragon/aragon-court${SUBGRAPH_EXT} ${SUBGRAPH_ID} graph_index_node_0
 fi
