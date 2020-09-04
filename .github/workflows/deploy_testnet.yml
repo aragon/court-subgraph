@@ -7,6 +7,7 @@ on:
 
 env:
   GRAPHKEY: ${{secrets.GRAPHKEY}}
+  DEPLOY_ARAGON: true
 
 jobs:
   deploy:
@@ -18,14 +19,8 @@ jobs:
     - name: Authenticate
       run: .github/scripts/kubectl-config.sh ${{secrets.KUBE_CA}} ${{secrets.KUBE_SERVER}} ${{secrets.KUBE_TOKEN}}
     - name: Staging
-      run: |
-        npm run deploy:staging > .github/scripts/deploy-output.tx
-        .github/scripts/kubectl-deploy.sh aragon-court-staging
+      run: npm run deploy:staging
     - name: Rinkeby
-      run: |
-        npm run deploy:rinkeby > .github/scripts/deploy-output.tx
-        .github/scripts/kubectl-deploy.sh aragon-court-rinkeby
+      run: npm run deploy:rinkeby
     - name: Ropsten
-      run: |
-        npm run deploy:ropsten > .github/scripts/deploy-output.tx
-        .github/scripts/kubectl-deploy.sh aragon-court-ropsten
+      run: npm run deploy:ropsten

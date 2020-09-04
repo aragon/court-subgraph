@@ -7,6 +7,7 @@ on:
 
 env:
   GRAPHKEY: ${{secrets.GRAPHKEY}}
+  DEPLOY_ARAGON: true
 
 jobs:
   deploy:
@@ -18,6 +19,4 @@ jobs:
     - name: Authenticate
       run: .github/scripts/kubectl-config.sh ${{secrets.KUBE_CA}} ${{secrets.KUBE_SERVER}} ${{secrets.KUBE_TOKEN}}
     - name: Deploy
-      run: |
-        npm run deploy:staging > .github/scripts/deploy-output.tx
-        .github/scripts/kubectl-deploy.sh aragon-court
+      run: npm run deploy:mainnet
