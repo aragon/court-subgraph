@@ -1,4 +1,4 @@
-name: Deploy Testnet
+name: Deploy Testnets
 
 on:
   push:
@@ -13,6 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - run: npm run deploy:staging
-    - run: npm run deploy:rinkeby
-    - run: npm run deploy:ropsten
+    - name: Install
+      run: npm install
+    - name: Staging
+      run: npm run deploy:staging
+    - name: Rinkeby
+      run: npm run deploy:rinkeby
+    - name: Ropsten
+      run: npm run deploy:ropsten
