@@ -153,7 +153,7 @@ export function handleModuleSet(event: ModuleSet): void {
 }
 
 function isModuleBlacklisted(module: Address): boolean {
-  return BLACKLISTED_MODULES.includes(module.toHex())
+  return BLACKLISTED_MODULES.includes(module.toHexString())
 }
 
 function isModuleAlreadySet(modules: string[], newModule: Address): boolean {
