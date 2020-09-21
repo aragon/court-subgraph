@@ -4,6 +4,61 @@
       "constant": false,
       "inputs": [
         {
+          "name": "_periodId",
+          "type": "uint256"
+        }
+      ],
+      "name": "transferFeesToGovernor",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "getOwedFeesDetails",
+      "outputs": [
+        {
+          "name": "feeToken",
+          "type": "address"
+        },
+        {
+          "name": "amountToPay",
+          "type": "uint256"
+        },
+        {
+          "name": "newLastPeriodId",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_feeToken",
+          "type": "address"
+        }
+      ],
+      "name": "setFeeToken",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
           "name": "_token",
           "type": "address"
         },
@@ -13,6 +68,20 @@
         }
       ],
       "name": "recoverFunds",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_governorSharePct",
+          "type": "uint16"
+        }
+      ],
+      "name": "setGovernorSharePct",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -35,6 +104,114 @@
     {
       "constant": true,
       "inputs": [],
+      "name": "getCurrentPeriodId",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_periodId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getPeriod",
+      "outputs": [
+        {
+          "name": "feeToken",
+          "type": "address"
+        },
+        {
+          "name": "balanceCheckpoint",
+          "type": "uint64"
+        },
+        {
+          "name": "totalActiveBalance",
+          "type": "uint256"
+        },
+        {
+          "name": "collectedFees",
+          "type": "uint256"
+        },
+        {
+          "name": "accumulatedGovernorFees",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "transferCurrentPeriodFeesToGovernor",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_appId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "unsetAppFee",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_appId",
+          "type": "bytes32"
+        },
+        {
+          "name": "_token",
+          "type": "address"
+        },
+        {
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "setAppFee",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_periodId",
+          "type": "uint256"
+        }
+      ],
+      "name": "claimFees",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
       "name": "currentFeeToken",
       "outputs": [
         {
@@ -44,6 +221,28 @@
       ],
       "payable": false,
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_appIds",
+          "type": "bytes32[]"
+        },
+        {
+          "name": "_tokens",
+          "type": "address[]"
+        },
+        {
+          "name": "_amounts",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "setAppFees",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -62,12 +261,173 @@
     },
     {
       "constant": true,
+      "inputs": [
+        {
+          "name": "_appId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "getAppFee",
+      "outputs": [
+        {
+          "name": "feeToken",
+          "type": "address"
+        },
+        {
+          "name": "feeAmount",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_appId",
+          "type": "bytes32"
+        },
+        {
+          "name": "_data",
+          "type": "bytes"
+        }
+      ],
+      "name": "payAppFees",
+      "outputs": [],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_juror",
+          "type": "address"
+        },
+        {
+          "name": "_periodId",
+          "type": "uint256"
+        }
+      ],
+      "name": "hasJurorClaimed",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_juror",
+          "type": "address"
+        },
+        {
+          "name": "_periodId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getJurorShare",
+      "outputs": [
+        {
+          "name": "feeToken",
+          "type": "address"
+        },
+        {
+          "name": "jurorShare",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_appIds",
+          "type": "bytes32[]"
+        }
+      ],
+      "name": "unsetAppFees",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "donate",
+      "outputs": [],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": true,
       "inputs": [],
       "name": "governorSharePct",
       "outputs": [
         {
           "name": "",
           "type": "uint16"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_periodId",
+          "type": "uint256"
+        }
+      ],
+      "name": "ensurePeriodBalanceDetails",
+      "outputs": [
+        {
+          "name": "periodBalanceCheckpoint",
+          "type": "uint64"
+        },
+        {
+          "name": "totalActiveBalance",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "isUpToDate",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
         }
       ],
       "payable": false,
@@ -301,366 +661,6 @@
       ],
       "name": "RecoverFunds",
       "type": "event"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "donate",
-      "outputs": [],
-      "payable": true,
-      "stateMutability": "payable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_periodId",
-          "type": "uint256"
-        }
-      ],
-      "name": "claimFees",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [],
-      "name": "transferCurrentPeriodFeesToGovernor",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_periodId",
-          "type": "uint256"
-        }
-      ],
-      "name": "transferFeesToGovernor",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_periodId",
-          "type": "uint256"
-        }
-      ],
-      "name": "ensurePeriodBalanceDetails",
-      "outputs": [
-        {
-          "name": "periodBalanceCheckpoint",
-          "type": "uint64"
-        },
-        {
-          "name": "totalActiveBalance",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_feeToken",
-          "type": "address"
-        }
-      ],
-      "name": "setFeeToken",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_governorSharePct",
-          "type": "uint16"
-        }
-      ],
-      "name": "setGovernorSharePct",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_appId",
-          "type": "bytes32"
-        },
-        {
-          "name": "_token",
-          "type": "address"
-        },
-        {
-          "name": "_amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "setAppFee",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_appIds",
-          "type": "bytes32[]"
-        },
-        {
-          "name": "_tokens",
-          "type": "address[]"
-        },
-        {
-          "name": "_amounts",
-          "type": "uint256[]"
-        }
-      ],
-      "name": "setAppFees",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_appId",
-          "type": "bytes32"
-        }
-      ],
-      "name": "unsetAppFee",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_appIds",
-          "type": "bytes32[]"
-        }
-      ],
-      "name": "unsetAppFees",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_appId",
-          "type": "bytes32"
-        },
-        {
-          "name": "_data",
-          "type": "bytes"
-        }
-      ],
-      "name": "payAppFees",
-      "outputs": [],
-      "payable": true,
-      "stateMutability": "payable",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "name": "isUpToDate",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "getCurrentPeriodId",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "_periodId",
-          "type": "uint256"
-        }
-      ],
-      "name": "getPeriod",
-      "outputs": [
-        {
-          "name": "feeToken",
-          "type": "address"
-        },
-        {
-          "name": "balanceCheckpoint",
-          "type": "uint64"
-        },
-        {
-          "name": "totalActiveBalance",
-          "type": "uint256"
-        },
-        {
-          "name": "collectedFees",
-          "type": "uint256"
-        },
-        {
-          "name": "accumulatedGovernorFees",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "name": "getOwedFeesDetails",
-      "outputs": [
-        {
-          "name": "feeToken",
-          "type": "address"
-        },
-        {
-          "name": "amountToPay",
-          "type": "uint256"
-        },
-        {
-          "name": "newLastPeriodId",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "_juror",
-          "type": "address"
-        },
-        {
-          "name": "_periodId",
-          "type": "uint256"
-        }
-      ],
-      "name": "getJurorShare",
-      "outputs": [
-        {
-          "name": "feeToken",
-          "type": "address"
-        },
-        {
-          "name": "jurorShare",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "_juror",
-          "type": "address"
-        },
-        {
-          "name": "_periodId",
-          "type": "uint256"
-        }
-      ],
-      "name": "hasJurorClaimed",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "_appId",
-          "type": "bytes32"
-        }
-      ],
-      "name": "getAppFee",
-      "outputs": [
-        {
-          "name": "feeToken",
-          "type": "address"
-        },
-        {
-          "name": "feeAmount",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
     }
   ]
 }

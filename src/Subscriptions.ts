@@ -52,13 +52,13 @@ export function handleAppFeePaid(event: AppFeePaid): void {
 }
 
 export function handleFeeTokenChanged(event: FeeTokenChanged): void {
-  let subscriptions = SubscriptionModule.load(event.address.toHex())
+  let subscriptions = SubscriptionModule.load(event.address.toHexString())
   subscriptions.feeToken = event.params.currentFeeToken
   subscriptions.save()
 }
 
 export function handleGovernorSharePctChanged(event: GovernorSharePctChanged): void {
-  let subscriptions = SubscriptionModule.load(event.address.toHex())
+  let subscriptions = SubscriptionModule.load(event.address.toHexString())
   subscriptions.governorSharePct = BigInt.fromI32(event.params.currentGovernorSharePct)
   subscriptions.save()
 }
@@ -67,7 +67,7 @@ export function handleAppFeeSet(event: AppFeeSet): void {
   let appFee = loadOrCreateAppFee(event.params.appId)
   appFee.isSet = true
   appFee.amount = event.params.amount
-  appFee.instance = event.address.toHex()
+  appFee.instance = event.address.toHexString()
   appFee.save()
 }
 
@@ -88,7 +88,7 @@ export function updateCurrentSubscriptionPeriod(module: Address, timestamp: BigI
 
   let period = loadOrCreateSubscriptionPeriod(periodId, timestamp)
   let currentPeriod = subscriptions.getPeriod(periodId)
-  period.instance = module.toHex()
+  period.instance = module.toHexString()
   period.feeToken = currentPeriod.value0
   period.balanceCheckpoint = currentPeriod.value1
   period.totalActiveBalance = currentPeriod.value2
@@ -120,8 +120,8 @@ function loadOrCreateToken(tokenAddress: Address, subscriptions: Address): Subsc
     token.totalSubscriptionFees = BigInt.fromI32(0)
     token.totalCollected = BigInt.fromI32(0)
     token.totalGovernorShares = BigInt.fromI32(0)
-    token.instance = subscriptions.toHex()
-    token.token = tokenAddress.toHex()
+    token.instance = subscriptions.toHexString()
+    token.token = tokenAddress.toHexString()
   }
 
   return token
@@ -130,7 +130,7 @@ function loadOrCreateToken(tokenAddress: Address, subscriptions: Address): Subsc
 function createJurorSubscriptionFee(juror: Address, periodId: BigInt, jurorShare: BigInt): void {
   let feeId = buildJurorSubscriptionFeeId(juror, periodId)
   let fee = new JurorSubscriptionFee(feeId)
-  fee.juror = juror.toHex()
+  fee.juror = juror.toHexString()
   fee.period = periodId.toString()
   fee.amount = jurorShare
   fee.save()
@@ -164,9 +164,9 @@ function loadOrCreateModule(address: Address): SubscriptionModule {
 }
 
 function buildJurorSubscriptionFeeId(juror: Address, periodId: BigInt): string {
-  return juror.toHex().concat(periodId.toString())
+  return juror.toHexString().concat(periodId.toString())
 }
 
 function buildSubscriptionTokenId(subscriptions: Address, token: Address): string {
-  return subscriptions.toHex().concat(token.toHex())
+  return subscriptions.toHexString().concat(token.toHexString())
 }
