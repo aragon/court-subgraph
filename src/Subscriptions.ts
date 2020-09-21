@@ -82,7 +82,7 @@ export function updateCurrentSubscriptionPeriod(module: Address, timestamp: BigI
   let subscriptions = Subscriptions.bind(module)
   let periodId = subscriptions.getCurrentPeriodId()
 
-  let subscriptionsModule = SubscriptionModule.load(module.toHex())
+  let subscriptionsModule = loadOrCreateModule(module)
   subscriptionsModule.currentPeriod = periodId
   subscriptionsModule.save()
 
@@ -145,6 +145,22 @@ function loadOrCreateAppFee(appId: Bytes): AppFee | null {
   }
 
   return appFee
+}
+
+function loadOrCreateModule(address: Address): SubscriptionModule {
+  let subscriptionModule = SubscriptionModule.load(address.toHexString())
+
+  if (subscriptionModule === null) {
+    subscriptionModule = new SubscriptionModule(address.toHexString())
+    let subscriptions = Subscriptions.bind(address)
+    subscriptionModule.court = subscriptions.getController().toHexString()
+    subscriptionModule.currentPeriod = BigInt.fromI32(0)
+    subscriptionModule.governorSharePct = BigInt.fromI32(subscriptions.governorSharePct())
+    subscriptionModule.feeToken = subscriptions.currentFeeToken()
+    subscriptionModule.periodDuration = subscriptions.periodDuration()
+  }
+
+  return subscriptionModule!
 }
 
 function buildJurorSubscriptionFeeId(juror: Address, periodId: BigInt): string {

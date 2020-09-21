@@ -3,7 +3,6 @@ import { BLACKLISTED_MODULES } from '../helpers/blacklisted-modules'
 import { ERC20 as ERC20Contract } from '../types/AragonCourt/ERC20'
 import { BigInt, Address, ethereum } from '@graphprotocol/graph-ts'
 import { updateCurrentSubscriptionPeriod } from './Subscriptions'
-import { Subscriptions as SubscriptionsContract } from '../types/templates/Subscriptions/Subscriptions'
 import { JurorsRegistry as JurorsRegistryContract } from '../types/templates/JurorsRegistry/JurorsRegistry'
 import { ERC20, CourtModule, CourtConfig, CourtTerm, SubscriptionModule, JurorsRegistryModule } from '../types/schema'
 import { ANJ, DisputeManager, JurorsRegistry, Treasury, Voting, Subscriptions } from '../types/templates'
@@ -131,14 +130,7 @@ export function handleModuleSet(event: ModuleSet): void {
     Subscriptions.create(newModuleAddress)
     module.type = SUBSCRIPTIONS_TYPE
 
-    let subscriptionModule = new SubscriptionModule(newModuleAddress.toHex())
-    let subscriptions = SubscriptionsContract.bind(newModuleAddress)
-    subscriptionModule.court = event.address.toHex()
-    subscriptionModule.currentPeriod = BigInt.fromI32(0)
-    subscriptionModule.governorSharePct = BigInt.fromI32(subscriptions.governorSharePct())
-    subscriptionModule.feeToken = subscriptions.currentFeeToken()
-    subscriptionModule.periodDuration = subscriptions.periodDuration()
-    subscriptionModule.save()
+
   }
   else {
     module.type = 'Unknown'

@@ -11,6 +11,7 @@ module.exports = {
   ],
   staging: [
     "0xf575097e4028a807FFB95e4969D888e98ebFCde0", // Subscriptions v1.0
+    "0xbcdb6f42c754bf6ee395fc4809662987944076dc", // Subscriptions v2.0 (wrong deployment)
   ],
   ropsten: [
     "0xbea6983739c6740889903A2470E9829D205cB5EB", // Disputes v1.0
