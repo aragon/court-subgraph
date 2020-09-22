@@ -1,6 +1,7 @@
+import { buildId } from '../helpers/id'
 import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts'
 import { createFeeMovement } from './Treasury'
-import { JurorSubscriptionFee, SubscriptionModule, SubscriptionPeriod, AppFee, SubscriptionTokenBalance } from '../types/schema'
+import { JurorSubscriptionFee, SubscriptionModule, SubscriptionPeriod, AppFee, SubscriptionFeeMovement } from '../types/schema'
 import {
   Subscriptions,
   FeesClaimed as FeesClaimedWithToken,
@@ -31,24 +32,35 @@ export function handleJurorFeesClaimedWithToken(event: FeesClaimedWithToken): vo
 }
 
 export function handleFeesDonated(event: FeesDonated): void {
-  let token = loadOrCreateToken(event.params.feeToken, event.address)
-  token.totalDonated = token.totalDonated.plus(event.params.feeAmount)
-  token.totalCollected = token.totalCollected.plus(event.params.feeAmount)
-  token.save()
-
   updateCurrentSubscriptionPeriod(event.address, event.block.timestamp)
+
+  const id = buildId(event)
+  const movement = new SubscriptionFeeMovement(id)
+  movement.type = 'Donation'
+  movement.period = event.params.periodId.toString()
+  movement.payer = event.params.payer
+  movement.amount = event.params.feeAmount
+  movement.createdAt = event.block.timestamp
+  movement.save()
 }
 
 export function handleAppFeePaid(event: AppFeePaid): void {
-  let subscriptions = Subscriptions.bind(event.address)
-  let feeToken = subscriptions.currentFeeToken()
-  let token = loadOrCreateToken(feeToken, event.address)
-  let appFee = loadOrCreateAppFee(event.params.appId)
-  token.totalAppFees = token.totalAppFees.plus(appFee.amount)
-  token.totalCollected = token.totalCollected.plus(appFee.amount)
-  token.save()
-
   updateCurrentSubscriptionPeriod(event.address, event.block.timestamp)
+
+  let subscriptions = Subscriptions.bind(event.address)
+  let periodId = subscriptions.getCurrentPeriodId()
+  const appFee = loadOrCreateAppFee(event.params.appId)
+
+  const id = buildId(event)
+  const movement = new SubscriptionFeeMovement(id)
+  movement.type = 'AppFee'
+  movement.period = periodId.toString()
+  movement.payer = event.params.by
+  movement.amount = appFee.amount
+  movement.appId = event.params.appId
+  movement.data = event.params.data
+  movement.createdAt = event.block.timestamp
+  movement.save()
 }
 
 export function handleFeeTokenChanged(event: FeeTokenChanged): void {
@@ -65,7 +77,6 @@ export function handleGovernorSharePctChanged(event: GovernorSharePctChanged): v
 
 export function handleAppFeeSet(event: AppFeeSet): void {
   let appFee = loadOrCreateAppFee(event.params.appId)
-  appFee.isSet = true
   appFee.amount = event.params.amount
   appFee.instance = event.address.toHexString()
   appFee.save()
@@ -73,7 +84,6 @@ export function handleAppFeeSet(event: AppFeeSet): void {
 
 export function handleAppFeeUnset(event: AppFeeUnset): void {
   let appFee = loadOrCreateAppFee(event.params.appId)
-  appFee.isSet = false
   appFee.amount = BigInt.fromI32(0)
   appFee.save()
 }
@@ -107,24 +117,6 @@ function loadOrCreateSubscriptionPeriod(periodId: BigInt, timestamp: BigInt): Su
   }
 
   return period
-}
-
-function loadOrCreateToken(tokenAddress: Address, subscriptions: Address): SubscriptionTokenBalance | null {
-  let id = buildSubscriptionTokenId(subscriptions, tokenAddress)
-  let token = SubscriptionTokenBalance.load(id)
-
-  if (token === null) {
-    token = new SubscriptionTokenBalance(id)
-    token.totalAppFees = BigInt.fromI32(0)
-    token.totalDonated = BigInt.fromI32(0)
-    token.totalSubscriptionFees = BigInt.fromI32(0)
-    token.totalCollected = BigInt.fromI32(0)
-    token.totalGovernorShares = BigInt.fromI32(0)
-    token.instance = subscriptions.toHexString()
-    token.token = tokenAddress.toHexString()
-  }
-
-  return token
 }
 
 function createJurorSubscriptionFee(juror: Address, periodId: BigInt, jurorShare: BigInt): void {
@@ -165,8 +157,4 @@ function loadOrCreateModule(address: Address): SubscriptionModule {
 
 function buildJurorSubscriptionFeeId(juror: Address, periodId: BigInt): string {
   return juror.toHexString().concat(periodId.toString())
-}
-
-function buildSubscriptionTokenId(subscriptions: Address, token: Address): string {
-  return subscriptions.toHexString().concat(token.toHexString())
 }
