@@ -28,7 +28,7 @@ dataSources:
         - name: JurorsRegistry
           file: ./node_modules/@aragon/court/abi/JurorsRegistry.json
         - name: Subscriptions
-          file: ./node_modules/@aragon/court/abi/CourtSubscriptions.json
+          file: ./abi/CourtSubscriptions.json
         - name: ERC20
           file: ./node_modules/@aragon/minime/abi/MiniMeToken.json
       eventHandlers:
