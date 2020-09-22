@@ -6,9 +6,7 @@ module.exports = {
     "0xA612843B7274384c6F3E78fC78f1EBa22Db26e11", // Voting v1.0
     "0x3b4c91Cfc006f48344eAFCe8783E46b690d5068F", // Subscriptions v1.0
   ],
-  rinkeby: [
-    "0x9Ea22B1D388873E230c45C9f140464Dcc48f0efb", // Subscriptions v1.0
-  ],
+  rinkeby: [],
   staging: [
     "0xf575097e4028a807FFB95e4969D888e98ebFCde0", // Subscriptions v1.0
     "0xbcdb6f42c754bf6ee395fc4809662987944076dc", // Subscriptions v2.0 (wrong deployment)
