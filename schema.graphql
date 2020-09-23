@@ -314,7 +314,7 @@ type JurorSubscriptionFee @entity {
 
 type SubscriptionFeeMovement @entity {
   id: ID!
-  token: ERC20!
+  token: Bytes!
   period: SubscriptionPeriod!
   payer: Bytes!
   amount: BigInt!

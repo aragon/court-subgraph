@@ -40,7 +40,7 @@ export function handleFeesDonated(event: FeesDonated): void {
   const id = buildId(event)
   const movement = new SubscriptionFeeMovement(id)
   movement.type = 'Donation'
-  movement.token = currentPeriod.value0.toString()
+  movement.token = currentPeriod.value0
   movement.period = event.params.periodId.toString()
   movement.payer = event.params.payer
   movement.amount = event.params.feeAmount
@@ -59,7 +59,7 @@ export function handleAppFeePaid(event: AppFeePaid): void {
   const id = buildId(event)
   const movement = new SubscriptionFeeMovement(id)
   movement.type = 'AppFee'
-  movement.token = currentPeriod.value0.toString()
+  movement.token = currentPeriod.value0
   movement.period = periodId.toString()
   movement.payer = event.params.by
   movement.amount = appFee.amount
