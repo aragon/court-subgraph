@@ -135,7 +135,7 @@ function createJurorSubscriptionFee(juror: Address, periodId: BigInt, jurorShare
 }
 
 function loadOrCreateAppFee(appId: Bytes): AppFee | null {
-  let id = appId.toString()
+  let id = appId.toHexString()
   let appFee = AppFee.load(id)
 
   if (appFee === null) {
