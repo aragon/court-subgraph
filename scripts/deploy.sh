@@ -49,7 +49,7 @@ if [[ -z "$SUBGRAPH_ID" ]]; then
   echo "Could not find subgraph ID in deploy output, cannot deploy to Aragon infra."
 else
   echo "Deploying subgraph ${SUBGRAPH_ID} to Aragon infra..."
-  kubectl exec deploy/graph-shell -- create aragon/aragon-court${SUBGRAPH_EXT}
-  kubectl exec deploy/graph-shell -- deploy aragon/aragon-court${SUBGRAPH_EXT} ${SUBGRAPH_ID} graph_index_node_0
-  kubectl exec deploy/graph-shell -- reassign aragon/aragon-court${SUBGRAPH_EXT} ${SUBGRAPH_ID} graph_index_node_0
+  kubectl exec graph-shell-0 -- create aragon/aragon-court${SUBGRAPH_EXT}
+  kubectl exec graph-shell-0 -- deploy aragon/aragon-court${SUBGRAPH_EXT} ${SUBGRAPH_ID} graph_index_node_0
+  kubectl exec graph-shell-0 -- reassign aragon/aragon-court${SUBGRAPH_EXT} ${SUBGRAPH_ID} graph_index_node_0
 fi
