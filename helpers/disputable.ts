@@ -3,6 +3,7 @@ import { Agreement } from '../types/templates/DisputeManager/Agreement'
 import { Disputable, Dispute } from '../types/schema'
 import { crypto, Bytes, Address, BigInt } from '@graphprotocol/graph-ts'
 
+// TODO: Update appId
 // App ID for disputable-voting.precedence-campaign.aragonpm.eth:
 const AGREEMENT_OPEN_APP_ID = '34c62f3aec3073826f39c2c35e9a1297d9dbf3cc77472283106f09eee9cf47bf'
 // App ID for agreement.precedence-campaign.aragonpm.eth:
