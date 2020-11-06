@@ -21,8 +21,11 @@ type CourtConfig @entity {
   appealCollateralFactor: BigInt!
   appealConfirmCollateralFactor: BigInt!
   minActiveBalance: BigInt!
+  minMaxPctTotalSupply: BigInt!
+  maxMaxPctTotalSupply: BigInt!
   fundsGovernor: Bytes
   configGovernor: Bytes
+  feesUpdater: Bytes
   modulesGovernor: Bytes
   brightIdRegister: BrightIdRegisterModule @derivedFrom(field: "court")
   jurorsRegistry: JurorsRegistryModule @derivedFrom(field: "court")

@@ -25,7 +25,7 @@ dataSources:
         - BrightIdRegisterModule
       abis:
         - name: AragonCourt
-          file: ./node_modules/@aragon/court/abi/AragonCourt.json
+          file: ./abi/AragonCourt.json
         - name: JurorsRegistry
           file: ./node_modules/@aragon/court/abi/JurorsRegistry.json
         - name: Subscriptions
@@ -41,10 +41,13 @@ dataSources:
           handler: handleFundsGovernorChanged
         - event: ConfigGovernorChanged(address,address)
           handler: handleConfigGovernorChanged
+        - event: FeesUpdaterChanged(address,address)
+          handler: handleFeesUpdaterChanged
         - event: ModulesGovernorChanged(address,address)
           handler: handleModulesGovernorChanged
         - event: ModuleSet(bytes32,address)
           handler: handleModuleSet
+
       file: ./src/AragonCourt.ts
 templates:
   - kind: ethereum/contract

@@ -6,7 +6,7 @@ import { JurorsRegistry as JurorsRegistryContract } from '../types/templates/Jur
 import { BrightIdRegister as BrightIdRegisterContract } from '../types/AragonCourt/BrightIdRegister'
 import { ERC20, CourtModule, CourtConfig, CourtTerm, BrightIdRegisterModule, JurorsRegistryModule } from '../types/schema'
 import { ANJ, BrightIdRegister, DisputeManager, JurorsRegistry, Treasury, Voting, Subscriptions } from '../types/templates'
-import { AragonCourt, Heartbeat, ModuleSet, FundsGovernorChanged, ConfigGovernorChanged, ModulesGovernorChanged } from '../types/AragonCourt/AragonCourt'
+import { AragonCourt, Heartbeat, ModuleSet, FundsGovernorChanged, ConfigGovernorChanged, FeesUpdaterChanged, ModulesGovernorChanged } from '../types/AragonCourt/AragonCourt'
 
 let DISPUTE_MANAGER_TYPE = 'DisputeManager'
 let JURORS_REGISTRY_TYPE = 'JurorsRegistry'
@@ -61,6 +61,12 @@ export function handleFundsGovernorChanged(event: FundsGovernorChanged): void {
 export function handleConfigGovernorChanged(event: ConfigGovernorChanged): void {
   let config = loadOrCreateConfig(event.address, event)
   config.configGovernor = event.params.currentGovernor
+  config.save()
+}
+
+export function handleFeesUpdaterChanged(event: FeesUpdaterChanged): void {
+  let config = loadOrCreateConfig(event.address, event)
+  config.feesUpdater = event.params.currentFeesUpdater
   config.save()
 }
 
@@ -196,7 +202,9 @@ function loadOrCreateConfig(courtAddress: Address, event: ethereum.Event): Court
   config.finalRoundLockTerms = result.value4[3]
   config.appealCollateralFactor = result.value5[0]
   config.appealConfirmCollateralFactor = result.value5[1]
-  config.minActiveBalance = result.value6
+  config.minActiveBalance = result.value6[0]
+  config.minMaxPctTotalSupply =  result.value6[1]
+  config.maxMaxPctTotalSupply =  result.value6[2]
 
   return config
 }
