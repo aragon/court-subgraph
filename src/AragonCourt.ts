@@ -1,24 +1,26 @@
-import { AragonCourt } from '../types/AragonCourt/AragonCourt'
-import { BLACKLISTED_MODULES } from '../helpers/blacklisted-modules'
-import { ERC20 as ERC20Contract } from '../types/AragonCourt/ERC20'
-import { BigInt, Address, ethereum, log } from '@graphprotocol/graph-ts'
+import { BigInt, Bytes, Address, ethereum, log } from '@graphprotocol/graph-ts'
+
 import { updateCurrentSubscriptionPeriod } from './Subscriptions'
+import { ERC20 as ERC20Contract } from '../types/AragonCourt/ERC20'
 import { JurorsRegistry as JurorsRegistryContract } from '../types/templates/JurorsRegistry/JurorsRegistry'
-import { ERC20, CourtModule, CourtConfig, CourtTerm, SubscriptionModule, JurorsRegistryModule } from '../types/schema'
-import { ANJ, DisputeManager, JurorsRegistry, Treasury, Voting, Subscriptions } from '../types/templates'
-import { Heartbeat, ModuleSet, FundsGovernorChanged, ConfigGovernorChanged, ModulesGovernorChanged } from '../types/AragonCourt/AragonCourt'
+import { BrightIdRegister as BrightIdRegisterContract } from '../types/AragonCourt/BrightIdRegister'
+import { ERC20, CourtModule, CourtConfig, CourtTerm, BrightIdRegisterModule, JurorsRegistryModule } from '../types/schema'
+import { ANJ, BrightIdRegister, DisputeManager, JurorsRegistry, Treasury, Voting, Subscriptions } from '../types/templates'
+import { AragonCourt, Heartbeat, ModuleSet, FundsGovernorChanged, ConfigGovernorChanged, ModulesGovernorChanged } from '../types/AragonCourt/AragonCourt'
 
 let DISPUTE_MANAGER_TYPE = 'DisputeManager'
 let JURORS_REGISTRY_TYPE = 'JurorsRegistry'
 let VOTING_TYPE = 'Voting'
 let TREASURY_TYPE = 'Treasury'
 let SUBSCRIPTIONS_TYPE = 'Subscriptions'
+let BRIGHTID_REGISTER_TYPE = 'BrightIdRegister'
 
 let DISPUTE_MANAGER_ID = '0x14a6c70f0f6d449c014c7bbc9e68e31e79e8474fb03b7194df83109a2d888ae6'
 let JURORS_REGISTRY_ID = '0x3b21d36b36308c830e6c4053fb40a3b6d79dde78947fbf6b0accd30720ab5370'
 let VOTING_ID = '0x7cbb12e82a6d63ff16fe43977f43e3e2b247ecd4e62c0e340da8800a48c67346'
 let TREASURY_ID = '0x06aa03964db1f7257357ef09714a5f0ca3633723df419e97015e0c7a3e83edb7'
 let SUBSCRIPTIONS_ID = '0x2bfa3327fe52344390da94c32a346eeb1b65a8b583e4335a419b9471e88c1365'
+let BRIGHTID_REGISTER_ID = '0xc8d8a5444a51ecc23e5091f18c4162834512a4bc5cae72c637db45c8c37b3329'
 
 export function handleHeartbeat(event: Heartbeat): void {
   let config = loadOrCreateConfig(event.address, event)
@@ -47,9 +49,7 @@ export function handleHeartbeat(event: Heartbeat): void {
   currentTerm.save()
 
   let subscriptions = court.getSubscriptions()
-  if (!isModuleBlacklisted(subscriptions)) {
-    updateCurrentSubscriptionPeriod(subscriptions, event.block.timestamp)
-  }
+  updateCurrentSubscriptionPeriod(subscriptions, event.block.timestamp)
 }
 
 export function handleFundsGovernorChanged(event: FundsGovernorChanged): void {
@@ -72,12 +72,6 @@ export function handleModulesGovernorChanged(event: ModulesGovernorChanged): voi
 
 export function handleModuleSet(event: ModuleSet): void {
   let newModuleAddress: Address = event.params.addr
-
-  // avoid blacklisted modules
-  if (isModuleBlacklisted(newModuleAddress)) {
-    log.warning('Ignoring blacklisted module {}', [newModuleAddress.toHexString()])
-    return
-  }
 
   // avoid duplicated modules
   let config = CourtConfig.load(event.address.toHexString())
@@ -132,6 +126,20 @@ export function handleModuleSet(event: ModuleSet): void {
     Subscriptions.create(newModuleAddress)
     module.type = SUBSCRIPTIONS_TYPE
   }
+  else if (id == BRIGHTID_REGISTER_ID) {
+    BrightIdRegister.create(newModuleAddress)
+    module.type = BRIGHTID_REGISTER_TYPE
+
+    let brightIdRegister = BrightIdRegisterContract.bind(newModuleAddress)
+
+    let brightIdRegisterModule = new BrightIdRegisterModule(newModuleAddress.toHexString())
+    brightIdRegisterModule.court = event.address.toHexString()
+
+    brightIdRegisterModule.verifiers = brightIdRegister.getBrightIdVerifiers() as Bytes[]
+    brightIdRegisterModule.registrationPeriod = brightIdRegister.registrationPeriod()
+    brightIdRegisterModule.verificationTimestampVariance = brightIdRegister.verificationTimestampVariance()
+    brightIdRegisterModule.save()
+  }
   else {
     module.type = 'Unknown'
   }
@@ -142,10 +150,6 @@ export function handleModuleSet(event: ModuleSet): void {
   config.save()
 
   module.save()
-}
-
-function isModuleBlacklisted(module: Address): boolean {
-  return BLACKLISTED_MODULES.includes(module.toHexString())
 }
 
 function isModuleAlreadySet(modules: string[], newModule: Address): boolean {
