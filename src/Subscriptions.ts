@@ -29,12 +29,16 @@ export function updateCurrentSubscriptionPeriod(module: Address, timestamp: BigI
   subscriptionsModule.save()
 
   let period = loadOrCreateSubscriptionPeriod(periodId, timestamp)
-  let currentPeriod = subscriptions.getPeriod(periodId)
+  let currentPeriod = subscriptions.try_getPeriod(periodId)
+  if (currentPeriod.reverted) {
+    return
+  }
+
   period.instance = module.toHexString()
-  period.balanceCheckpoint = currentPeriod.value0
-  period.feeToken = currentPeriod.value1
-  period.totalActiveBalance = currentPeriod.value2
-  period.donatedFees = currentPeriod.value3
+  period.balanceCheckpoint = currentPeriod.value.value0
+  period.feeToken = currentPeriod.value.value1
+  period.totalActiveBalance = currentPeriod.value.value2
+  period.donatedFees = currentPeriod.value.value3
   period.save()
 }
 
