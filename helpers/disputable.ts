@@ -3,13 +3,10 @@ import { Agreement } from '../types/templates/DisputeManager/Agreement'
 import { Disputable, Dispute } from '../types/schema'
 import { crypto, Bytes, Address, BigInt } from '@graphprotocol/graph-ts'
 
-// TODO: Update appId
-// App ID for disputable-voting.precedence-campaign.aragonpm.eth:
-const AGREEMENT_OPEN_APP_ID = '34c62f3aec3073826f39c2c35e9a1297d9dbf3cc77472283106f09eee9cf47bf'
-// App ID for agreement.precedence-campaign.aragonpm.eth:
-const AGREEMENT_PC_APP_ID = '15a969a0e134d745b604fb43f699bb5c146424792084c198d53050c4d08126d1'
+// App ID for agreement-1hive.open.aragonpm.eth:
+const AGREEMENT_OPEN_APP_ID = '41dd0b999b443a19321f2f34fe8078d1af95a1487b49af4c2ca57fb9e3e5331e'
 
-const AGREEMENT_APP_ID_LENGTH = AGREEMENT_PC_APP_ID.length
+const AGREEMENT_APP_ID_LENGTH = AGREEMENT_OPEN_APP_ID.length
 const AGREEMENT_DISPUTE_METADATA_LENGTH = 64 // "[APP_ID][CHALLENGE_ID]" = 32 + 32
 
 export function tryDecodingAgreementMetadata(dispute: Dispute): void {
@@ -18,7 +15,7 @@ export function tryDecodingAgreementMetadata(dispute: Dispute): void {
 
   let header = rawMetadata.subarray(0, AGREEMENT_APP_ID_LENGTH / 2) as Bytes
   let actualAppId = header.toHexString().slice(2)
-  if (actualAppId != AGREEMENT_OPEN_APP_ID && actualAppId != AGREEMENT_PC_APP_ID) return
+  if (actualAppId != AGREEMENT_OPEN_APP_ID) return
 
   let rawChallengeId = rawMetadata.subarray(AGREEMENT_APP_ID_LENGTH / 2, rawMetadata.length) as Bytes
   let challengeId = BigInt.fromSignedBytes(rawChallengeId.reverse() as Bytes)
