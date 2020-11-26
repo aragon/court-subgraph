@@ -8,3 +8,4 @@ package-lock.json
 build
 types
 subgraph.yaml
+deploy-output.txt
