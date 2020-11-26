@@ -6,7 +6,7 @@ set -o errexit
 # Court known addresses
 court_ropsten=
 court_staging=
-court_rinkeby=0x5376017b1721144B7d029Af94BB0EB9Ffaa66B3C
+court_rinkeby=0xabfA51EBb58b1315B9B7EFaEeB77baE032fAB7f3
 court_mainnet=
 
 # Known block numbers
