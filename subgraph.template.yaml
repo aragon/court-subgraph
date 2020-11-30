@@ -77,10 +77,12 @@ templates:
         - name: Controller
           file: ./node_modules/@aragon/court/abi/Controller.json
         - name: DisputeManager
-          file: ./node_modules/@aragon/court/abi/DisputeManager.json
+          file: ./abi/DisputeManager.json
       eventHandlers:
         - event: NewDispute(indexed uint256,indexed address,indexed uint64,uint64,bytes)
           handler: handleNewDispute
+        - event: EvidenceSubmitted(indexed uint256,indexed address,bytes)
+          handler: handleEvidenceSubmitted
         - event: EvidencePeriodClosed(indexed uint256,indexed uint64)
           handler: handleEvidencePeriodClosed
         - event: JurorDrafted(indexed uint256,indexed uint256,indexed address)
@@ -161,7 +163,7 @@ templates:
         - name: Voting
           file: ./node_modules/@aragon/court/abi/CRVoting.json
         - name: DisputeManager
-          file: ./node_modules/@aragon/court/abi/DisputeManager.json
+          file: ./abi/DisputeManager.json
         - name: Controller
           file: ./node_modules/@aragon/court/abi/Controller.json
       eventHandlers:
@@ -253,23 +255,3 @@ templates:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
       file: ./src/ANJ.ts
-  - kind: ethereum/contract
-    name: Arbitrable
-    network: {{network}}
-    source:
-      abi: Arbitrable
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      entities:
-        - Arbitrable
-      abis:
-        - name: Arbitrable
-          file: ./abi/IArbitrable.json
-      eventHandlers:
-        - event: EvidenceSubmitted(indexed uint256,indexed address,bytes,bool)
-          handler: handleEvidenceSubmittedWithoutArbitrator
-        - event: EvidenceSubmitted(indexed address,indexed uint256,indexed address,bytes,bool)
-          handler: handleEvidenceSubmittedWithArbitrator
-      file: ./src/Arbitrable.ts
