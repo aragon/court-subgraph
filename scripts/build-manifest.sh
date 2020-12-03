@@ -4,16 +4,16 @@
 set -o errexit
 
 # Court known addresses
-court_ropsten=0x3b26bc496aebaed5b3E0E81cDE6B582CDe71396e
-court_staging=0x52180af656a1923024d1accf1d827ab85ce48878
-court_rinkeby=0xf7970965489f4d4eafcf5fad55ca5ea57fb4bfcb
-court_mainnet=0xee4650cBe7a2B23701D416f58b41D8B76b617797
+court_ropsten=
+court_staging=
+court_rinkeby=0xabfA51EBb58b1315B9B7EFaEeB77baE032fAB7f3
+court_mainnet=
 
 # Known block numbers
-start_block_ropsten=6819000
-start_block_staging=6199000
-start_block_rinkeby=7238369
-start_block_mainnet=9017000
+start_block_ropsten=
+start_block_staging=
+start_block_rinkeby=7495315
+start_block_mainnet=
 
 # Validate network
 networks=(rpc ropsten staging rinkeby mainnet)
@@ -65,7 +65,3 @@ sed -i -e "s/{{network}}/${ENV}/g" subgraph.yaml
 sed -i -e "s/{{court}}/${COURT}/g" subgraph.yaml
 sed -i -e "s/{{startBlock}}/${START_BLOCK}/g" subgraph.yaml
 rm -f subgraph.yaml-e
-
-# Parse blacklisted modules
-echo "Setting blacklisted modules"
-node ./scripts/parse-blacklisted-modules.js "$NETWORK"

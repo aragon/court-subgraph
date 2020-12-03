@@ -1,6 +1,6 @@
 specVersion: 0.0.2
-description: Aragon Court subgraph
-repository: https://github.com/aragon/court-subgraph/
+description: 1Hive Celeste subgraph
+repository: https://github.com/1hive/celeste-subgraph/
 schema:
   file: ./schema.graphql
 dataSources:
@@ -22,15 +22,18 @@ dataSources:
         - SubscriptionModule
         - SubscriptionPeriod
         - JurorSubscriptionFee
+        - BrightIdRegisterModule
       abis:
         - name: AragonCourt
-          file: ./node_modules/@aragon/court/abi/AragonCourt.json
+          file: ./abi/AragonCourt.json
         - name: JurorsRegistry
           file: ./node_modules/@aragon/court/abi/JurorsRegistry.json
         - name: Subscriptions
           file: ./abi/CourtSubscriptions.json
         - name: ERC20
           file: ./node_modules/@aragon/minime/abi/MiniMeToken.json
+        - name: BrightIdRegister
+          file: ./abi/BrightIdRegister.json
       eventHandlers:
         - event: Heartbeat(uint64,uint64)
           handler: handleHeartbeat
@@ -38,10 +41,13 @@ dataSources:
           handler: handleFundsGovernorChanged
         - event: ConfigGovernorChanged(address,address)
           handler: handleConfigGovernorChanged
+        - event: FeesUpdaterChanged(address,address)
+          handler: handleFeesUpdaterChanged
         - event: ModulesGovernorChanged(address,address)
           handler: handleModulesGovernorChanged
         - event: ModuleSet(bytes32,address)
           handler: handleModuleSet
+
       file: ./src/AragonCourt.ts
 templates:
   - kind: ethereum/contract
@@ -71,10 +77,12 @@ templates:
         - name: Controller
           file: ./node_modules/@aragon/court/abi/Controller.json
         - name: DisputeManager
-          file: ./node_modules/@aragon/court/abi/DisputeManager.json
+          file: ./abi/DisputeManager.json
       eventHandlers:
         - event: NewDispute(indexed uint256,indexed address,indexed uint64,uint64,bytes)
           handler: handleNewDispute
+        - event: EvidenceSubmitted(indexed uint256,indexed address,bytes)
+          handler: handleEvidenceSubmitted
         - event: EvidencePeriodClosed(indexed uint256,indexed uint64)
           handler: handleEvidencePeriodClosed
         - event: JurorDrafted(indexed uint256,indexed uint256,indexed address)
@@ -155,7 +163,7 @@ templates:
         - name: Voting
           file: ./node_modules/@aragon/court/abi/CRVoting.json
         - name: DisputeManager
-          file: ./node_modules/@aragon/court/abi/DisputeManager.json
+          file: ./abi/DisputeManager.json
         - name: Controller
           file: ./node_modules/@aragon/court/abi/Controller.json
       eventHandlers:
@@ -197,35 +205,37 @@ templates:
       apiVersion: 0.0.3
       language: wasm/assemblyscript
       entities:
-        - AppFee
         - FeeMovement
         - SubscriptionModule
         - SubscriptionPeriod
-        - SubscriptionTokenBalance
         - JurorSubscriptionFee
       abis:
         - name: Subscriptions
           file: ./abi/CourtSubscriptions.json
       eventHandlers:
-        # Court subscriptions v1.1.3 events
         - event: FeesClaimed(indexed address,indexed uint256,uint256)
-          handler: handleJurorFeesClaimedWithoutToken
-        # Court subscriptions v1.2.0 events
-        - event: FeesClaimed(indexed address,indexed uint256,address,uint256)
-          handler: handleJurorFeesClaimedWithToken
-        - event: FeesDonated(indexed address,indexed uint256,address,uint256)
-          handler: handleFeesDonated
+          handler: handleJurorFeesClaimed
         - event: FeeTokenChanged(address,address)
           handler: handleFeeTokenChanged
-        - event: GovernorSharePctChanged(uint16,uint16)
-          handler: handleGovernorSharePctChanged
-        - event: AppFeeSet(indexed bytes32,address,uint256)
-          handler: handleAppFeeSet
-        - event: AppFeeUnset(indexed bytes32)
-          handler: handleAppFeeUnset
-        - event: AppFeePaid(indexed address,bytes32,bytes)
-          handler: handleAppFeePaid
       file: ./src/Subscriptions.ts
+  - kind: ethereum/contract
+    name: BrightIdRegister
+    network: {{network}}
+    source:
+      abi: BrightIdRegister
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      entities:
+        - Juror
+      abis:
+        - name: BrightIdRegister
+          file: ./abi/BrightIdRegister.json
+      eventHandlers:
+        - event: Register(address)
+          handler: handleUserRegistered
+      file: ./src/BrightIdRegister.ts
   - kind: ethereum/contract
     name: ANJ
     network: {{network}}
@@ -245,23 +255,3 @@ templates:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
       file: ./src/ANJ.ts
-  - kind: ethereum/contract
-    name: Arbitrable
-    network: {{network}}
-    source:
-      abi: Arbitrable
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      entities:
-        - Arbitrable
-      abis:
-        - name: Arbitrable
-          file: ./abi/IArbitrable.json
-      eventHandlers:
-        - event: EvidenceSubmitted(indexed uint256,indexed address,bytes,bool)
-          handler: handleEvidenceSubmittedWithoutArbitrator
-        - event: EvidenceSubmitted(indexed address,indexed uint256,indexed address,bytes,bool)
-          handler: handleEvidenceSubmittedWithArbitrator
-      file: ./src/Arbitrable.ts

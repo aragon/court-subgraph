@@ -21,9 +21,13 @@ type CourtConfig @entity {
   appealCollateralFactor: BigInt!
   appealConfirmCollateralFactor: BigInt!
   minActiveBalance: BigInt!
+  minMaxPctTotalSupply: BigInt!
+  maxMaxPctTotalSupply: BigInt!
   fundsGovernor: Bytes
   configGovernor: Bytes
+  feesUpdater: Bytes
   modulesGovernor: Bytes
+  brightIdRegister: BrightIdRegisterModule @derivedFrom(field: "court")
   jurorsRegistry: JurorsRegistryModule @derivedFrom(field: "court")
   subscriptions: SubscriptionModule @derivedFrom(field: "court")
   modules: [CourtModule!] @derivedFrom(field: "court")
@@ -60,6 +64,7 @@ enum CourtModuleType {
   Voting
   Treasury
   Subscriptions
+  BrightIdRegister
 }
 
 type Dispute @entity {
@@ -192,6 +197,9 @@ type Juror @entity {
   drafts: [JurorDraft!] @derivedFrom(field: "juror")
   anjMovements: [ANJMovement!] @derivedFrom(field: "juror")
   claimedSubscriptionFees: [JurorSubscriptionFee!] @derivedFrom(field: "juror")
+  uniqueUserId: Bytes!
+  registerTime: BigInt!
+  addressVoided: Boolean!
   createdAt: BigInt!
 }
 
@@ -273,6 +281,14 @@ type TreasuryBalance @entity {
   amount: BigInt!
 }
 
+type BrightIdRegisterModule @entity {
+  id: ID!
+  court: CourtConfig! 
+  verifiers: [Bytes!]!
+  registrationPeriod: BigInt!
+  verificationTimestampVariance: BigInt!
+}
+
 type JurorsRegistryModule @entity {
   id: ID!
   court: CourtConfig!
@@ -287,21 +303,17 @@ type SubscriptionModule @entity {
   currentPeriod: BigInt!
   feeToken: Bytes!
   periodDuration: BigInt!
-  governorSharePct: BigInt!
   periods: [SubscriptionPeriod!] @derivedFrom(field: "instance")
-  appFees: [AppFee!] @derivedFrom(field: "instance")
 }
 
 type SubscriptionPeriod @entity {
   id: ID!
   feeToken: Bytes!
-  collectedFees: BigInt!
+  donatedFees: BigInt!
   balanceCheckpoint: BigInt!
   totalActiveBalance: BigInt!
-  accumulatedGovernorFees: BigInt!
   instance: SubscriptionModule!
   jurorClaims: [JurorSubscriptionFee!] @derivedFrom(field: "period")
-  feeMovements: [SubscriptionFeeMovement!] @derivedFrom(field: "period")
   createdAt: BigInt!
 }
 
@@ -310,27 +322,4 @@ type JurorSubscriptionFee @entity {
   juror: Juror!
   period: SubscriptionPeriod!
   amount: BigInt!
-}
-
-type SubscriptionFeeMovement @entity {
-  id: ID!
-  token: Bytes!
-  period: SubscriptionPeriod!
-  payer: Bytes!
-  amount: BigInt!
-  type: SubscriptionFeeMovementType!
-  appId: Bytes
-  data: Bytes
-  createdAt: BigInt!
-}
-
-enum SubscriptionFeeMovementType {
-  Donation
-  AppFee
-}
-
-type AppFee @entity {
-  id: ID!
-  amount: BigInt!
-  instance: SubscriptionModule!
 }

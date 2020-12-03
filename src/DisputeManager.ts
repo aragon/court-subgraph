@@ -2,12 +2,12 @@ import { concat } from '../helpers/bytes'
 import { buildId } from '../helpers/id'
 import { createFeeMovement } from './Treasury'
 import { tryDecodingAgreementMetadata } from '../helpers/disputable'
-import { Arbitrable as ArbitrableTemplate } from '../types/templates'
 import { crypto, Bytes, BigInt, Address, ethereum } from '@graphprotocol/graph-ts'
-import { AdjudicationRound, Arbitrable, Dispute, Appeal, JurorDispute, JurorDraft } from '../types/schema'
+import { AdjudicationRound, Arbitrable, Dispute, Evidence, Appeal, JurorDispute, JurorDraft } from '../types/schema'
 import {
   DisputeManager,
   NewDispute,
+  EvidenceSubmitted,
   EvidencePeriodClosed,
   JurorDrafted,
   DisputeStateChanged,
@@ -42,9 +42,19 @@ export function handleNewDispute(event: NewDispute): void {
   updateRound(event.params.disputeId, dispute.lastRoundId, event)
   tryDecodingAgreementMetadata(dispute)
 
-  ArbitrableTemplate.create(event.params.subject)
   let arbitrable = new Arbitrable(event.params.subject.toHexString())
   arbitrable.save()
+}
+
+export function handleEvidenceSubmitted(event: EvidenceSubmitted): void {
+  let id = event.transaction.hash.toHexString() + event.logIndex.toHexString()
+  let evidence = new Evidence(id)
+  evidence.arbitrable = event.address.toHexString()
+  evidence.dispute = event.params.disputeId.toString()
+  evidence.data = event.params.evidence
+  evidence.submitter = event.params.submitter
+  evidence.createdAt = event.block.timestamp
+  evidence.save()
 }
 
 export function handleEvidencePeriodClosed(event: EvidencePeriodClosed): void {
