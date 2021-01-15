@@ -6,13 +6,13 @@ set -o errexit
 # Court known addresses
 court_ropsten=
 court_staging=
-court_rinkeby=0xabfA51EBb58b1315B9B7EFaEeB77baE032fAB7f3
+court_rinkeby=0x5B987B7a303894AFD23063B02c5Ee39E1F02306e
 court_mainnet=
 
 # Known block numbers
 start_block_ropsten=
 start_block_staging=
-start_block_rinkeby=7495315
+start_block_rinkeby=7887679
 start_block_mainnet=
 
 # Validate network

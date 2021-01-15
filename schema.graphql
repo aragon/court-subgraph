@@ -197,7 +197,7 @@ type Juror @entity {
   drafts: [JurorDraft!] @derivedFrom(field: "juror")
   anjMovements: [ANJMovement!] @derivedFrom(field: "juror")
   claimedSubscriptionFees: [JurorSubscriptionFee!] @derivedFrom(field: "juror")
-  uniqueUserId: Bytes!
+  uniqueUserId: Bytes
   registerTime: BigInt!
   addressVoided: Boolean!
   createdAt: BigInt!
