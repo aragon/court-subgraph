@@ -28,17 +28,18 @@ export function updateCurrentSubscriptionPeriod(module: Address, timestamp: BigI
   subscriptionsModule.currentPeriod = periodId
   subscriptionsModule.save()
 
-  let period = loadOrCreateSubscriptionPeriod(periodId, timestamp)
-  let currentPeriod = subscriptions.try_getPeriod(periodId)
-  if (currentPeriod.reverted) {
+  let previousPeriodId = periodId.equals(BigInt.fromI32(0)) ? periodId: periodId.minus(BigInt.fromI32(1))
+  let period = loadOrCreateSubscriptionPeriod(previousPeriodId, timestamp)
+  let previousPeriod = subscriptions.try_getPeriod(previousPeriodId)
+  if (previousPeriod.reverted) {
     return
   }
 
   period.instance = module.toHexString()
-  period.balanceCheckpoint = currentPeriod.value.value0
-  period.feeToken = currentPeriod.value.value1
-  period.totalActiveBalance = currentPeriod.value.value2
-  period.donatedFees = currentPeriod.value.value3
+  period.balanceCheckpoint = previousPeriod.value.value0
+  period.feeToken = previousPeriod.value.value1
+  period.totalActiveBalance = previousPeriod.value.value2
+  period.donatedFees = previousPeriod.value.value3
   period.save()
 }
 
