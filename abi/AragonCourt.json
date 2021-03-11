@@ -14,48 +14,6 @@
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_fromTermId",
-        "type": "uint64"
-      },
-      {
-        "name": "_feeToken",
-        "type": "address"
-      },
-      {
-        "name": "_fees",
-        "type": "uint256[3]"
-      },
-      {
-        "name": "_roundStateDurations",
-        "type": "uint64[5]"
-      },
-      {
-        "name": "_pcts",
-        "type": "uint16[2]"
-      },
-      {
-        "name": "_roundParams",
-        "type": "uint64[4]"
-      },
-      {
-        "name": "_appealCollateralParams",
-        "type": "uint256[2]"
-      },
-      {
-        "name": "_jurorsParams",
-        "type": "uint256[3]"
-      }
-    ],
-    "name": "setConfig",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "constant": true,
     "inputs": [],
     "name": "getVoting",
@@ -334,6 +292,28 @@
   },
   {
     "constant": false,
+    "inputs": [
+      {
+        "name": "_disputeId",
+        "type": "uint256"
+      },
+      {
+        "name": "_submitter",
+        "type": "address"
+      },
+      {
+        "name": "_evidence",
+        "type": "bytes"
+      }
+    ],
+    "name": "submitEvidence",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
     "inputs": [],
     "name": "ensureCurrentTermRandomness",
     "outputs": [
@@ -378,6 +358,25 @@
     "constant": true,
     "inputs": [
       {
+        "name": "_termId",
+        "type": "uint64"
+      }
+    ],
+    "name": "getTermTokenTotalSupply",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
         "name": "_id",
         "type": "bytes32"
       }
@@ -391,20 +390,6 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_disputeId",
-        "type": "uint256"
-      }
-    ],
-    "name": "executeRuling",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -514,6 +499,48 @@
     "constant": false,
     "inputs": [
       {
+        "name": "_fromTermId",
+        "type": "uint64"
+      },
+      {
+        "name": "_feeToken",
+        "type": "address"
+      },
+      {
+        "name": "_fees",
+        "type": "uint256[3]"
+      },
+      {
+        "name": "_maxRulingOptions",
+        "type": "uint8"
+      },
+      {
+        "name": "_roundParams",
+        "type": "uint64[9]"
+      },
+      {
+        "name": "_pcts",
+        "type": "uint16[2]"
+      },
+      {
+        "name": "_appealCollateralParams",
+        "type": "uint256[2]"
+      },
+      {
+        "name": "_jurorsParams",
+        "type": "uint256[3]"
+      }
+    ],
+    "name": "setConfig",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
         "name": "_possibleRulings",
         "type": "uint256"
       },
@@ -571,6 +598,29 @@
     "type": "function"
   },
   {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_disputeId",
+        "type": "uint256"
+      }
+    ],
+    "name": "rule",
+    "outputs": [
+      {
+        "name": "subject",
+        "type": "address"
+      },
+      {
+        "name": "ruling",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "constant": true,
     "inputs": [],
     "name": "getDisputeManager",
@@ -603,16 +653,16 @@
         "type": "uint256[3]"
       },
       {
-        "name": "roundStateDurations",
-        "type": "uint64[5]"
+        "name": "maxRulingOptions",
+        "type": "uint8"
+      },
+      {
+        "name": "roundParams",
+        "type": "uint64[9]"
       },
       {
         "name": "pcts",
         "type": "uint16[2]"
-      },
-      {
-        "name": "roundParams",
-        "type": "uint64[4]"
       },
       {
         "name": "appealCollateralParams",
@@ -662,6 +712,10 @@
       {
         "name": "randomness",
         "type": "bytes32"
+      },
+      {
+        "name": "celesteTokenTotalSupply",
+        "type": "uint256"
       }
     ],
     "payable": false,
@@ -701,16 +755,16 @@
         "type": "uint256[3]"
       },
       {
-        "name": "_roundStateDurations",
-        "type": "uint64[5]"
+        "name": "_maxRulingOptions",
+        "type": "uint8"
+      },
+      {
+        "name": "_roundParams",
+        "type": "uint64[9]"
       },
       {
         "name": "_pcts",
         "type": "uint16[2]"
-      },
-      {
-        "name": "_roundParams",
-        "type": "uint64[4]"
       },
       {
         "name": "_appealCollateralParams",
