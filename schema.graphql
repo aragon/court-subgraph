@@ -12,6 +12,7 @@ type CourtConfig @entity {
   revealTerms: BigInt!
   appealTerms: BigInt!
   appealConfirmationTerms: BigInt!
+  maxRulingOptions: Int!
   penaltyPct: Int!
   finalRoundReduction: Int!
   firstRoundJurorsNumber: BigInt!
