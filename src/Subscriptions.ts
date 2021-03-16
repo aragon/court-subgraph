@@ -1,4 +1,4 @@
-import { Address, BigInt } from '@graphprotocol/graph-ts'
+import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts'
 import { createFeeMovement } from './Treasury'
 import { JurorSubscriptionFee, SubscriptionModule, SubscriptionPeriod } from '../types/schema'
 import {
@@ -29,13 +29,12 @@ export function updateCurrentSubscriptionPeriod(module: Address, timestamp: BigI
   subscriptionsModule.save()
 
   let previousPeriodId = periodId.equals(BigInt.fromI32(0)) ? periodId: periodId.minus(BigInt.fromI32(1))
-  let period = loadOrCreateSubscriptionPeriod(previousPeriodId, timestamp)
+  let period = loadOrCreateSubscriptionPeriod(previousPeriodId, module, timestamp)
   let previousPeriod = subscriptions.try_getPeriod(previousPeriodId)
   if (previousPeriod.reverted) {
     return
   }
 
-  period.instance = module.toHexString()
   period.balanceCheckpoint = previousPeriod.value.value0
   period.feeToken = previousPeriod.value.value1
   period.totalActiveBalance = previousPeriod.value.value2
@@ -43,15 +42,20 @@ export function updateCurrentSubscriptionPeriod(module: Address, timestamp: BigI
   period.save()
 }
 
-function loadOrCreateSubscriptionPeriod(periodId: BigInt, timestamp: BigInt): SubscriptionPeriod | null {
+function loadOrCreateSubscriptionPeriod(periodId: BigInt, instance: Address, timestamp: BigInt): SubscriptionPeriod | null {
   let id = periodId.toString()
   let period = SubscriptionPeriod.load(id)
 
   if (period === null) {
     period = new SubscriptionPeriod(id)
+    period.feeToken = Bytes.fromHexString("0x")
+    period.donatedFees = BigInt.fromI32(0)
+    period.totalActiveBalance = BigInt.fromI32(0)
+    period.instance = instance.toHexString()
     period.createdAt = timestamp
   }
 
+  period.save()
   return period
 }
 
