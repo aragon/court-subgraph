@@ -48,8 +48,9 @@ function loadOrCreateSubscriptionPeriod(periodId: BigInt, instance: Address, tim
 
   if (period === null) {
     period = new SubscriptionPeriod(id)
-    period.feeToken = Bytes.fromHexString("0x")
+    period.feeToken = Bytes.fromHexString("0x") as Bytes
     period.donatedFees = BigInt.fromI32(0)
+    period.balanceCheckpoint = BigInt.fromI32(0)
     period.totalActiveBalance = BigInt.fromI32(0)
     period.instance = instance.toHexString()
     period.createdAt = timestamp
