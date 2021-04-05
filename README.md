@@ -10,10 +10,8 @@
 
 ### Remotes
 
-1. [Mainnet](https://thegraph.com/explorer/subgraph/aragon/aragon-court)
-2. [Rinkeby](https://thegraph.com/explorer/subgraph/aragon/aragon-court-rinkeby)
-3. [Ropsten](https://thegraph.com/explorer/subgraph/aragon/aragon-court-ropsten)
-4. [Staging](https://thegraph.com/explorer/subgraph/aragon/aragon-court-staging)
+1. [Xdai](https://thegraph.com/explorer/subgraph/1hive/celeste)
+2. [Rinkeby](https://thegraph.com/explorer/subgraph/1hive/celeste-rinkeby)
 
 ### Local
 
