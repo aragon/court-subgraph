@@ -13,7 +13,7 @@ if [[ -z "${GRAPHKEY}" ]]; then
 fi
 
 # Use custom subgraph name based on target network
-if [[ "$NETWORK" != "mainnet" ]]; then
+if [[ "$NETWORK" != "xdai" ]]; then
   SUBGRAPH_EXT="-${NETWORK}"
 else
   SUBGRAPH_EXT=""

@@ -4,21 +4,19 @@
 set -o errexit
 
 # Court known addresses
-court_ropsten=
 court_staging=
 court_rinkeby=0x35e7433141D5f7f2EB7081186f5284dCDD2ccacE
-court_mainnet=
+court_xdai=0x44E4fCFed14E1285c9e0F6eae77D5fDd0F196f85
 
 # Known block numbers
-start_block_ropsten=
 start_block_staging=
 start_block_rinkeby=8250225
-start_block_mainnet=
+start_block_xdai=14861364
 
 # Validate network
-networks=(rpc ropsten staging rinkeby mainnet)
+networks=(rpc staging rinkeby xdai)
 if [[ -z $NETWORK || ! " ${networks[@]} " =~ " ${NETWORK} " ]]; then
-  echo 'Please make sure the network provided is either rpc, ropsten, staging, rinkeby, or mainnet.'
+  echo 'Please make sure the network provided is either rpc, staging, rinkeby, or xdai.'
   exit 1
 fi
 
