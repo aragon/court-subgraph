@@ -236,22 +236,3 @@ templates:
         - event: Register(address)
           handler: handleUserRegistered
       file: ./src/BrightIdRegister.ts
-  - kind: ethereum/contract
-    name: ANJ
-    network: {{network}}
-    source:
-      abi: ANJ
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      entities:
-        - ANJBalance
-        - ANJTransfer
-      abis:
-        - name: ANJ
-          file: ./node_modules/@aragon/minime/abi/MiniMeToken.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
-      file: ./src/ANJ.ts
