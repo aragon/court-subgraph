@@ -246,20 +246,6 @@ enum ANJMovementType {
   Slash
 }
 
-type ANJBalance @entity {
-  id: ID!
-  owner: Bytes!
-  amount: BigInt!
-}
-
-type ANJTransfer @entity {
-  id: ID!
-  from: Bytes!
-  to: Bytes!
-  amount: BigInt!
-  createdAt: BigInt!
-}
-
 type FeeMovement @entity {
   id: ID!
   owner: Bytes!

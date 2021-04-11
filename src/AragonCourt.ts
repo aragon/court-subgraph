@@ -5,7 +5,7 @@ import { ERC20 as ERC20Contract } from '../types/AragonCourt/ERC20'
 import { JurorsRegistry as JurorsRegistryContract } from '../types/templates/JurorsRegistry/JurorsRegistry'
 import { BrightIdRegister as BrightIdRegisterContract } from '../types/AragonCourt/BrightIdRegister'
 import { ERC20, CourtModule, CourtConfig, CourtTerm, BrightIdRegisterModule, JurorsRegistryModule } from '../types/schema'
-import { ANJ, BrightIdRegister, DisputeManager, JurorsRegistry, Treasury, Voting, Subscriptions } from '../types/templates'
+import { BrightIdRegister, DisputeManager, JurorsRegistry, Treasury, Voting, Subscriptions } from '../types/templates'
 import { AragonCourt, Heartbeat, ModuleSet, FundsGovernorChanged, ConfigGovernorChanged, FeesUpdaterChanged, ModulesGovernorChanged } from '../types/AragonCourt/AragonCourt'
 
 let DISPUTE_MANAGER_TYPE = 'DisputeManager'
@@ -97,7 +97,6 @@ export function handleModuleSet(event: ModuleSet): void {
 
     let jurorsRegistry = JurorsRegistryContract.bind(newModuleAddress)
     let anjAddress = jurorsRegistry.token()
-    ANJ.create(anjAddress)
 
     let anjContract = ERC20Contract.bind(anjAddress)
     let anj = new ERC20(anjAddress.toHexString())
