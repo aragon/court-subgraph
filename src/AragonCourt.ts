@@ -1,5 +1,5 @@
 import { BigInt, Bytes, Address, ethereum, log } from '@graphprotocol/graph-ts'
-
+import { BLACKLISTED_MODULES } from '../helpers/blacklisted-modules'
 import { updateCurrentSubscriptionPeriod } from './Subscriptions'
 import { ERC20 as ERC20Contract } from '../types/AragonCourt/ERC20'
 import { JurorsRegistry as JurorsRegistryContract } from '../types/templates/JurorsRegistry/JurorsRegistry'
@@ -49,7 +49,9 @@ export function handleHeartbeat(event: Heartbeat): void {
   currentTerm.save()
 
   let subscriptions = court.getSubscriptions()
-  updateCurrentSubscriptionPeriod(subscriptions, event.block.timestamp)
+  if (!isModuleBlacklisted(subscriptions)) {
+    updateCurrentSubscriptionPeriod(subscriptions, event.block.timestamp)
+  }
 }
 
 export function handleFundsGovernorChanged(event: FundsGovernorChanged): void {
@@ -78,6 +80,11 @@ export function handleModulesGovernorChanged(event: ModulesGovernorChanged): voi
 
 export function handleModuleSet(event: ModuleSet): void {
   let newModuleAddress: Address = event.params.addr
+
+  if (isModuleBlacklisted(newModuleAddress)) {
+    log.warning('Ignoring blacklisted module {}', [newModuleAddress.toHexString()])
+    return
+  }
 
   // avoid duplicated modules
   let config = CourtConfig.load(event.address.toHexString())
@@ -155,6 +162,10 @@ export function handleModuleSet(event: ModuleSet): void {
   config.save()
 
   module.save()
+}
+
+function isModuleBlacklisted(module: Address): boolean {
+  return BLACKLISTED_MODULES.includes(module.toHexString())
 }
 
 function isModuleAlreadySet(modules: string[], newModule: Address): boolean {
