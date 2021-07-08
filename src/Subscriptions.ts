@@ -2,9 +2,10 @@ import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts'
 import { createFeeMovement } from './Treasury'
 import { JurorSubscriptionFee, SubscriptionModule, SubscriptionPeriod } from '../types/schema'
 import {
-  Subscriptions,
   FeesClaimed,
   FeeTokenChanged,
+  PeriodPercentageYieldChanged,
+  Subscriptions,
 } from '../types/templates/Subscriptions/Subscriptions'
 
 let SUBSCRIPTIONS = 'Subscriptions'
@@ -17,6 +18,12 @@ export function handleJurorFeesClaimed(event: FeesClaimed): void {
 export function handleFeeTokenChanged(event: FeeTokenChanged): void {
   let subscriptions = SubscriptionModule.load(event.address.toHexString())
   subscriptions.feeToken = event.params.currentFeeToken
+  subscriptions.save()
+}
+
+export function handlePeriodPercentageYieldChanged(event: PeriodPercentageYieldChanged): void {
+  let subscriptions = SubscriptionModule.load(event.address.toHexString())
+  subscriptions.periodPercentageYield = event.params.currenetYield
   subscriptions.save()
 }
 
@@ -79,6 +86,7 @@ function loadOrCreateModule(address: Address): SubscriptionModule {
     subscriptionModule.currentPeriod = BigInt.fromI32(0)
     subscriptionModule.feeToken = subscriptions.currentFeeToken()
     subscriptionModule.periodDuration = subscriptions.periodDuration()
+    subscriptionModule.periodPercentageYield = subscriptions.periodPercentageYield()
   }
 
   return subscriptionModule!

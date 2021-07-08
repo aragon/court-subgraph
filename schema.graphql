@@ -290,6 +290,7 @@ type SubscriptionModule @entity {
   currentPeriod: BigInt!
   feeToken: Bytes!
   periodDuration: BigInt!
+  periodPercentageYield: BigInt!
   periods: [SubscriptionPeriod!] @derivedFrom(field: "instance")
 }
 

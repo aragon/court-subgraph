@@ -2,6 +2,20 @@
   {
     "constant": true,
     "inputs": [],
+    "name": "periodPercentageYield",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
     "name": "getCurrentPeriod",
     "outputs": [
       {
@@ -92,6 +106,20 @@
     ],
     "payable": false,
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_periodPercentageYield",
+        "type": "uint256"
+      }
+    ],
+    "name": "setPeriodPercentageYield",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -208,6 +236,10 @@
       {
         "name": "_feeToken",
         "type": "address"
+      },
+      {
+        "name": "_periodPercentageYield",
+        "type": "uint256"
       }
     ],
     "payable": false,
@@ -251,6 +283,23 @@
       }
     ],
     "name": "FeeTokenChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "previousYield",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "currenetYield",
+        "type": "uint256"
+      }
+    ],
+    "name": "PeriodPercentageYieldChanged",
     "type": "event"
   },
   {
