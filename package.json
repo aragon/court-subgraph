@@ -8,22 +8,26 @@
     "build:graph:staging": "NETWORK=staging npm run build:graph",
     "build:graph:rinkeby": "NETWORK=rinkeby npm run build:graph",
     "build:graph:xdai": "NETWORK=xdai npm run build:graph",
+    "build:graph:matic": "NETWORK=matic npm run build:graph",
     "build:manifest": "./scripts/build-manifest.sh",
     "build:manifest:rpc": "NETWORK=rpc npm run build:manifest",
     "build:manifest:staging": "NETWORK=staging npm run build:manifest",
     "build:manifest:rinkeby": "NETWORK=rinkeby npm run build:manifest",
     "build:manifest:xdai": "NETWORK=xdai npm run build:manifest",
+    "build:manifest:matic": "NETWORK=matic npm run build:manifest",
     "codegen": "./scripts/codegen.sh",
     "codegen:rpc": "NETWORK=rpc npm run codegen",
     "codegen:ropsten": "NETWORK=ropsten npm run codegen",
     "codegen:staging": "NETWORK=staging npm run codegen",
     "codegen:rinkeby": "NETWORK=rinkeby npm run codegen",
     "codegen:xdai": "NETWORK=xdai npm run codegen",
+    "codegen:matic": "NETWORK=matic npm run codegen",
     "deploy": "./scripts/deploy.sh",
     "deploy:rpc": "NETWORK=rpc npm run deploy",
     "deploy:staging": "NETWORK=staging npm run deploy",
     "deploy:rinkeby": "NETWORK=rinkeby npm run deploy",
-    "deploy:xdai": "NETWORK=xdai npm run deploy"
+    "deploy:xdai": "NETWORK=xdai npm run deploy",
+    "deploy:matic": "NETWORK=matic npm run deploy"
   },
   "devDependencies": {
     "graphqlviz": "^3.1.0"
